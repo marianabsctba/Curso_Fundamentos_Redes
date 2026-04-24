@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fundamentos de Redes para Cibersegurança · 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --rose:#c8506a;--rose-l:#e87a94;--rose-d:#9e3352;
+  --gold:#c9913d;--gold-l:#e8b86d;--gold-p:#f5deb3;
+  --cream:#fdf6f0;--paper:#fefaf6;--paper2:#f9f0e8;
+  --border:#e8d5c0;--border2:#d4b896;
+  --ink:#1a0a06;--ink2:#3d1e10;--ink3:#6b3a20;
+  --sb:#120810;--sb2:#2a0f1c;
+  --r:8px;--sh:0 4px 24px rgba(45,10,20,.14);--shL:0 10px 48px rgba(45,10,20,.22);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:#210812;color:var(--ink);display:flex;height:100vh;overflow:hidden}
+
+/* SIDEBAR */
+#sidebar{width:272px;min-width:272px;background:#210812;border-right:1px solid var(--sb2);display:flex;flex-direction:column;overflow:hidden}
+.sb-logo{padding:20px 16px 16px;border-bottom:1px solid var(--sb2)}
+.sb-logo-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.sb-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--rose),var(--gold));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.sb-title{font-family:'Playfair Display',serif;font-size:12.5px;color:var(--gold-l);line-height:1.35}
+.sb-sub{font-size:9px;color:#e9b7c5;letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
+.sb-prog{padding:10px 16px;border-bottom:1px solid var(--sb2)}
+.sb-prog-row{display:flex;justify-content:space-between;font-size:9px;color:#e9b7c5;margin-bottom:5px;letter-spacing:.05em;text-transform:uppercase}
+.sb-bar-bg{height:3px;background:#2a0f1c;border-radius:99px;overflow:hidden}
+.sb-bar-fill{height:100%;background:linear-gradient(90deg,var(--rose),var(--gold));border-radius:99px;transition:width .5s}
+.sb-nav{flex:1;overflow-y:auto;padding:6px 0}
+.sb-nav::-webkit-scrollbar{width:3px}
+.sb-nav::-webkit-scrollbar-thumb{background:#3a1020;border-radius:99px}
+.sb-sec{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#3a1020;padding:10px 16px 3px;font-weight:700}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 16px;cursor:pointer;border-left:2px solid transparent;transition:all .18s}
+.nav-item:hover{background:rgba(200,80,106,.07)}
+.nav-item.active{background:rgba(200,80,106,.13);border-left-color:var(--rose)}
+.nav-item.locked{opacity:.35;cursor:not-allowed}
+.nav-item.done .n-num{background:var(--gold);color:#120810;border-color:var(--gold)}
+.n-num{width:20px;height:20px;border-radius:50%;background:#3a1020;border:1px solid #6a2a3f;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#f2c9d4;flex-shrink:0;transition:all .18s}
+.nav-item.active .n-num{background:var(--rose);border-color:var(--rose);color:#fff}
+.n-title{font-size:10.5px;color:#f1c8d2;line-height:1.35;flex:1}
+.nav-item.active .n-title{color:#e0b0c0}
+.n-lock{font-size:9px;color:#3a1020}
+.n-chk{font-size:9px;color:var(--gold)}
+
+/* MAIN */
+#main{flex:1;overflow-y:auto;background:linear-gradient(135deg,#2a0b17,#3a1020 45%,#210812);display:flex;flex-direction:column;align-items:center;padding:26px 18px}
+#main::-webkit-scrollbar{width:5px}
+#main::-webkit-scrollbar-thumb{background:#3a1020;border-radius:99px}
+
+/* PDF PAGE */
+.pdf-page{width:100%;max-width:790px;background:var(--paper);border-radius:2px;box-shadow:var(--shL),0 0 0 1px rgba(200,80,106,.07);margin-bottom:24px;overflow:hidden;position:relative}
+.pdf-page::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top right,rgba(201,145,61,.04),transparent 60%),radial-gradient(ellipse at bottom left,rgba(200,80,106,.04),transparent 60%);pointer-events:none}
+.pdf-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 32px;background:linear-gradient(135deg,#2a0e1c,#180810);border-bottom:2px solid var(--gold)}
+.pdf-hd-brand{font-family:'Playfair Display',serif;font-size:10px;color:var(--gold-l);letter-spacing:.1em;text-transform:uppercase}
+.pdf-hd-ch{font-size:10px;color:#f3d6df;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.pdf-body{padding:40px 48px 32px}
+.pdf-ft{display:flex;align-items:center;justify-content:space-between;padding:10px 32px;background:var(--paper2);border-top:1px solid var(--border)}
+.pdf-ft-l,.pdf-ft-r{font-size:9px;color:var(--ink3);letter-spacing:.04em}
+.pdf-ft-pg{width:24px;height:24px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--ink3)}
+
+/* TYPOGRAPHY */
+.ch-eye{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--rose);font-weight:700;margin-bottom:6px}
+.ch-h1{font-family:'Playfair Display',serif;font-size:27px;color:var(--ink);line-height:1.2;margin-bottom:4px}
+.ch-sub{font-size:13.5px;color:var(--ink2);margin-bottom:16px}
+.ch-div{height:2px;background:linear-gradient(90deg,var(--rose),var(--gold),transparent);margin-bottom:24px;border-radius:1px}
+.ch-h2{font-family:'Playfair Display',serif;font-size:18px;color:var(--ink);margin:24px 0 8px;padding-left:10px;border-left:3px solid var(--rose)}
+.ch-h3{font-size:12.5px;font-weight:700;color:var(--rose-d);margin:16px 0 6px;letter-spacing:.02em}
+.ch-p{font-size:13.5px;color:var(--ink2);line-height:1.82;margin-bottom:12px}
+.ch-p strong{color:var(--ink);font-weight:700}
+ul.ch-ul{margin:8px 0 12px 18px}
+ul.ch-ul li{font-size:13.5px;color:var(--ink2);line-height:1.82}
+ul.ch-ul li::marker{color:var(--rose)}
+.dom-badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:99px;margin-bottom:8px}
+.dom-1{background:rgba(200,80,106,.1);color:var(--rose);border:1px solid rgba(200,80,106,.3)}
+.dom-2{background:rgba(201,145,61,.1);color:var(--gold);border:1px solid rgba(201,145,61,.3)}
+.dom-3{background:rgba(60,100,200,.1);color:#6080e0;border:1px solid rgba(60,100,200,.3)}
+.dom-4{background:rgba(40,140,80,.1);color:#40a060;border:1px solid rgba(40,140,80,.3)}
+.dom-5{background:rgba(140,60,160,.1);color:#a060c0;border:1px solid rgba(140,60,160,.3)}
+
+/* CALLOUTS */
+.box{border-radius:var(--r);padding:12px 16px;margin:14px 0;display:flex;gap:10px;align-items:flex-start}
+.box-rose{background:rgba(200,80,106,.08);border:1px solid rgba(200,80,106,.26)}
+.box-gold{background:rgba(201,145,61,.08);border:1px solid rgba(201,145,61,.26)}
+.box-blue{background:rgba(60,100,200,.08);border:1px solid rgba(60,100,200,.26)}
+.box-green{background:rgba(40,140,80,.08);border:1px solid rgba(40,140,80,.26)}
+.box-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.box-txt{font-size:13px;color:var(--ink2);line-height:1.72}
+.box-txt strong{color:var(--ink);font-weight:700}
+
+/* TABLES */
+.ch-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:12.5px}
+.ch-tbl th{background:linear-gradient(135deg,#2a0e1c,#3a1828);color:var(--gold-l);padding:8px 12px;text-align:left;font-weight:700;letter-spacing:.04em;font-size:11px}
+.ch-tbl td{padding:7px 12px;border-bottom:1px solid var(--border);color:var(--ink2)}
+.ch-tbl tr:nth-child(even) td{background:rgba(200,80,106,.025)}
+
+/* DIAGRAM */
+.diagram{background:#fef8f2;border:1px solid var(--border);border-radius:var(--r);padding:16px;margin:14px 0;text-align:center;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink2);line-height:2}
+
+/* NET NODES */
+.net-d{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;padding:14px}
+.nn{display:inline-block;padding:6px 13px;border-radius:var(--r);font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace}
+.nn-r{background:#2a0e1c;color:var(--gold-l);border:1px solid var(--gold)}
+.nn-sw{background:#0e0f28;color:#b0a0f0;border:1px solid #5050b0}
+.nn-h{background:#0e2818;color:#80e0a0;border:1px solid #3a7a50}
+.nn-fw{background:#2a0a0a;color:var(--rose-l);border:1px solid var(--rose)}
+.nn-cl{background:#0a1828;color:#60c0f0;border:1px solid #2060a0}
+.nn-at{background:#2a0a0a;color:#ff8090;border:1px solid #cc2040;font-style:italic}
+.na{color:var(--ink3);font-size:14px;margin:0 4px}
+
+/* LAB */
+.lab{background:linear-gradient(135deg,#fef3f6,#fdf8f0);border:2px solid var(--rose);border-radius:10px;padding:20px;margin:20px 0;position:relative;overflow:hidden}
+.lab::before{content:'⚗';position:absolute;right:16px;top:10px;font-size:24px;opacity:.1}
+.lab-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.lab-badge{background:linear-gradient(135deg,var(--rose),var(--gold));color:#fff;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:99px}
+.lab-title{font-family:'Playfair Display',serif;font-size:15px;color:var(--ink)}
+.lab-desc{font-size:13px;color:var(--ink2);line-height:1.72;margin-bottom:12px}
+
+/* TERMINAL — LETRAS CLARAS sobre fundo escuro */
+.term-wrap{background:#080410;border:1px solid #3a1828;border-radius:10px;overflow:hidden;margin:14px 0}
+.term-bar{background:#110818;padding:8px 14px;display:flex;align-items:center;gap:6px;border-bottom:1px solid #2a1020}
+.td{width:10px;height:10px;border-radius:50%}
+.td-r{background:#c8506a}.td-y{background:#c9913d}.td-g{background:#5aad70}
+.term-ttl{font-size:10px;color:#f3cbd5;font-family:'JetBrains Mono',monospace;margin-left:4px}
+.term-body{padding:13px 17px;min-height:80px;max-height:230px;overflow-y:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.8;background:#080410}
+/* ── CORES DO TERMINAL — todas claras e legíveis ── */
+.t-out{color:#ddc8b8;font-weight:500}         /* output — creme claro */
+.t-cmd{color:#f0c060;font-weight:700}          /* comandos — amarelo */
+.t-cm {color:#f4b8c8;font-weight:700}          /* comentário — vinho escuro (decorativo) */
+.t-ok {color:#7adcaa;font-weight:600}          /* sucesso — verde claro */
+.t-err{color:#ff7888;font-weight:600}          /* erro/alerta — rosa claro */
+.t-hl {color:#f8e060;font-weight:700}          /* destaque — amarelo brilhante */
+.t-info{color:#80c8f0;font-weight:500}         /* info — azul claro */
+.term-in-row{display:flex;align-items:center;padding:7px 17px;border-top:1px solid #1a0818;gap:6px;background:#080410}
+.t-prompt{color:var(--rose);font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700}
+.t-input{flex:1;background:transparent;border:none;outline:none;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#f0c060;caret-color:var(--rose)}
+.t-run{background:linear-gradient(135deg,var(--rose-d),var(--rose));color:#fff;border:none;padding:4px 12px;border-radius:99px;font-size:10px;font-weight:700;cursor:pointer;letter-spacing:.04em}
+
+/* QUIZ */
+.quiz{background:#fef9fb;border:1px solid var(--border2);border-radius:10px;padding:20px;margin:20px 0}
+.quiz-ttl{font-family:'Playfair Display',serif;font-size:16px;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.q-block{margin-bottom:16px}
+.q-text{font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:8px;line-height:1.6}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.q-opt{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#fff;border:1.5px solid var(--border);border-radius:var(--r);cursor:pointer;font-size:13px;color:var(--ink2);transition:all .18s;user-select:none}
+.q-opt:hover{border-color:var(--rose-l);background:rgba(200,80,106,.04)}
+.q-opt.sel{border-color:var(--rose);background:rgba(200,80,106,.07);color:var(--ink)}
+.q-opt.right{border-color:#2a8a50;background:rgba(42,138,80,.08);color:#1a5030}
+.q-opt.wrong{border-color:#cc2040;background:rgba(204,32,64,.07);color:#7a1020}
+.q-lt{width:20px;height:20px;border-radius:50%;background:var(--paper2);border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;color:var(--ink3)}
+.q-fb{margin-top:8px;padding:8px 12px;border-radius:var(--r);font-size:12.5px;display:none;line-height:1.65}
+.q-fb.show{display:block}
+.q-fb.ok{background:rgba(42,138,80,.08);color:#1a5030;border:1px solid rgba(42,138,80,.3)}
+.q-fb.fail{background:rgba(204,32,64,.07);color:#7a1020;border:1px solid rgba(204,32,64,.3)}
+.q-sub{margin-top:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.q-score-txt{font-size:12.5px;color:var(--ink3)}
+.q-btn{background:linear-gradient(135deg,var(--rose),var(--rose-d));color:#fff;border:none;padding:8px 20px;border-radius:99px;font-size:12.5px;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:all .18s}
+.q-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(200,80,106,.3)}
+.q-btn:disabled{opacity:.45;cursor:default;transform:none}
+
+/* ATK callout */
+.atk{background:#fef3f3;border:2px solid rgba(200,80,106,.3);border-radius:10px;padding:16px;margin:14px 0}
+.atk-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.atk-badge{background:var(--rose);color:#fff;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:99px}
+.atk-title{font-family:'Playfair Display',serif;font-size:14px;color:var(--ink)}
+
+/* CODE */
+.code{background:#0a0614;border:1px solid #2a1020;border-radius:var(--r);padding:13px 16px;margin:12px 0;overflow-x:auto}
+.code-lbl{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--rose);margin-bottom:6px;font-weight:700}
+.code pre{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#ddc8b8;line-height:1.72}
+.code .kw{color:var(--gold-l)}.code .st{color:#a0e0b0}.code .cm{color:#5a2838}.code .nm{color:var(--rose-l)}
+
+/* INTERACTIVE */
+.osi-row{display:flex;align-items:center;gap:12px;padding:8px 14px;border-radius:var(--r);margin-bottom:4px;cursor:pointer;border:1.5px solid transparent;transition:all .18s}
+.osi-row:hover{border-color:var(--rose-l)}
+.osi-row.open{border-color:var(--rose);background:rgba(200,80,106,.05)}
+.osi-n{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:12px;font-weight:700;flex-shrink:0}
+.osi-inf strong{display:block;font-size:12.5px;color:var(--ink)}
+.osi-inf span{font-size:11.5px;color:var(--ink3)}
+.osi-det{display:none;padding:10px 14px;background:rgba(200,80,106,.04);border-left:3px solid var(--rose);margin:-2px 0 6px 44px;border-radius:0 var(--r) var(--r) 0;font-size:12.5px;color:var(--ink2);line-height:1.72}
+.osi-det.show{display:block}
+.ports-g{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:12px 0}
+.port-c{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:10px;cursor:pointer;transition:all .18s;text-align:center}
+.port-c:hover{border-color:var(--rose-l);transform:translateY(-1px);box-shadow:0 3px 10px rgba(200,80,106,.1)}
+.port-n{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--rose)}
+.port-nm{font-size:11.5px;font-weight:700;color:var(--ink);margin:2px 0}
+.port-d{font-size:10px;color:var(--ink3)}
+#port-detail{display:none;margin-top:9px;padding:12px 15px;background:rgba(200,80,106,.06);border:1px solid rgba(200,80,106,.24);border-radius:var(--r);font-size:13px;color:var(--ink2);line-height:1.7}
+.band-viz{display:flex;gap:9px;margin:12px 0;flex-wrap:wrap}
+.band-card{flex:1;min-width:130px;background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:12px;cursor:pointer;transition:all .18s;text-align:center}
+.band-card:hover,.band-card.sel{border-color:var(--rose);background:rgba(200,80,106,.05)}
+.band-freq{font-family:'Playfair Display',serif;font-size:20px;color:var(--rose);font-weight:700}
+.band-label{font-size:11px;font-weight:700;color:var(--ink);margin:2px 0}
+.band-desc{font-size:11px;color:var(--ink3)}
+#band-detail{display:none;margin-top:9px;padding:12px 15px;background:rgba(200,80,106,.06);border:1px solid rgba(200,80,106,.24);border-radius:var(--r);font-size:13px;color:var(--ink2);line-height:1.7}
+.cable-row{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}
+.cable-c{flex:1;min-width:110px;background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:11px;cursor:pointer;transition:all .18s;text-align:center}
+.cable-c:hover,.cable-c.sel{border-color:var(--gold);background:rgba(201,145,61,.05)}
+.cable-cat{font-family:'Playfair Display',serif;font-size:16px;color:var(--gold);font-weight:700}
+.cable-spd{font-size:11px;font-weight:700;color:var(--ink);margin:2px 0}
+.cable-note{font-size:10px;color:var(--ink3)}
+#cable-detail{display:none;margin-top:9px;padding:12px 15px;background:rgba(201,145,61,.06);border:1px solid rgba(201,145,61,.24);border-radius:var(--r);font-size:13px;color:var(--ink2);line-height:1.7}
+.sub-calc{background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px;margin:14px 0}
+.sub-row{display:flex;gap:10px;margin-bottom:10px;align-items:center;flex-wrap:wrap}
+.sub-lbl{font-size:13px;font-weight:600;color:var(--ink2);min-width:110px}
+.sub-inp{font-family:'JetBrains Mono',monospace;font-size:13px;padding:6px 12px;border:1.5px solid var(--border);border-radius:var(--r);color:var(--ink);background:var(--paper2);outline:none;width:170px}
+.sub-inp:focus{border-color:var(--rose)}
+.sub-res{background:#080410;border-radius:var(--r);padding:12px;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:2;display:none;color:#ddc8b8}
+.sub-res.show{display:block}
+.sr-k{color:var(--gold-l)}.sr-v{color:#80e0b0}
+.calc-btn{background:linear-gradient(135deg,var(--rose-d),var(--rose));color:#fff;border:none;padding:7px 18px;border-radius:99px;font-size:12px;font-weight:700;cursor:pointer}
+.trbl-step{display:flex;gap:11px;margin-bottom:9px;align-items:flex-start}
+.trbl-n{width:25px;height:25px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--gold));color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.trbl-txt{font-size:13.5px;color:var(--ink2);line-height:1.72;padding-top:3px}
+.trbl-txt strong{color:var(--ink)}
+
+/* NAV BAR */
+.ch-nav{width:100%;max-width:790px;display:flex;justify-content:space-between;align-items:center;padding:0 0 16px}
+.nav-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:99px;font-size:12.5px;font-weight:700;cursor:pointer;transition:all .18s;border:1.5px solid transparent;letter-spacing:.02em}
+.nav-btn.pri{background:linear-gradient(135deg,var(--rose),var(--gold));color:#fff}
+.nav-btn.pri:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(200,80,106,.35)}
+.nav-btn.sec{border-color:#3a1828;color:#7a4050;background:transparent}
+.nav-btn.sec:hover{border-color:var(--rose);color:var(--rose-l)}
+
+/* WELCOME */
+#welcome-view{display:flex;flex-direction:column;align-items:center;width:100%;max-width:790px}
+.wlc-page{width:100%;background:var(--paper);border-radius:2px;box-shadow:var(--shL);overflow:hidden}
+.wlc-hero{background:linear-gradient(135deg,#2a0e1c,#180810,#0d0508);padding:52px 48px 44px;position:relative;overflow:hidden}
+.wlc-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:280px;height:280px;background:radial-gradient(circle,rgba(201,145,61,.13),transparent 70%);pointer-events:none}
+.wlc-tag{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.wlc-tag::before{content:'';width:20px;height:1px;background:var(--gold)}
+.wlc-h1{font-family:'Playfair Display',serif;font-size:38px;color:var(--cream);line-height:1.15;margin-bottom:4px}
+.wlc-h1 em{color:var(--gold-l);font-style:italic}
+.wlc-sub{font-size:13.5px;color:#f0c8d2;font-weight:700;margin-bottom:22px;line-height:1.6}
+.wlc-stats{display:flex;gap:24px;flex-wrap:wrap}
+.wlc-stat strong{font-family:'Playfair Display',serif;font-size:24px;color:var(--gold-l);display:block}
+.wlc-stat span{font-size:10px;color:#f0c8d2;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.wlc-body{padding:36px 48px 44px}
+.wlc-intro{font-size:14px;color:var(--ink2);line-height:1.82;margin-bottom:20px}
+.wlc-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:20px 0}
+.wlc-mod{display:flex;gap:8px;padding:12px;background:var(--paper2);border:1px solid var(--border);border-radius:var(--r);align-items:flex-start}
+.wm-i{font-size:18px;flex-shrink:0}
+.wm-t strong{font-size:12px;color:var(--ink);display:block;margin-bottom:2px}
+.wm-t span{font-size:11px;color:var(--ink3)}
+.wlc-req{background:rgba(201,145,61,.06);border:1px solid rgba(201,145,61,.22);border-radius:var(--r);padding:14px 17px;margin:16px 0}
+.wr-ttl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.wr-item{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink2);margin-bottom:4px}
+.wr-item::before{content:'◆';color:var(--gold);font-size:7px}
+.start-btn{width:100%;background:linear-gradient(135deg,var(--rose),var(--gold));color:#fff;border:none;padding:14px;border-radius:99px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.06em;margin-top:24px;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .22s}
+.start-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(200,80,106,.4)}
+
+/* CERT */
+#cert-view{display:none;flex-direction:column;align-items:center;padding:32px 18px;width:100%}
+.cert-wrap{width:100%;max-width:790px;background:var(--paper);border:3px solid var(--gold);border-radius:4px;position:relative;overflow:hidden;box-shadow:0 0 0 8px rgba(201,145,61,.07),var(--shL)}
+.cert-corner{position:absolute;width:50px;height:50px;border:2px solid var(--gold);opacity:.4}
+.cert-corner.tl{top:10px;left:10px;border-right:none;border-bottom:none}
+.cert-corner.tr{top:10px;right:10px;border-left:none;border-bottom:none}
+.cert-corner.bl{bottom:10px;left:10px;border-right:none;border-top:none}
+.cert-corner.br{bottom:10px;right:10px;border-left:none;border-top:none}
+.cert-top{background:linear-gradient(135deg,#2a0e1c,#180810);padding:20px 44px;text-align:center;border-bottom:2px solid var(--gold)}
+.cert-issuer{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.cert-course{font-family:'Playfair Display',serif;font-size:19px;color:var(--gold-l);font-style:italic}
+.cert-body{padding:30px 56px;text-align:center}
+.cert-pres{font-size:11px;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.cert-inp{font-family:'Playfair Display',serif;font-size:24px;border:none;border-bottom:2px solid var(--gold);text-align:center;width:340px;color:var(--ink);background:transparent;outline:none;display:block;margin:0 auto 6px}
+.cert-desc{font-size:13px;color:var(--ink2);line-height:1.75;max-width:500px;margin:12px auto}
+.cert-skills{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:16px 0}
+.cert-tag{font-size:10px;padding:3px 10px;border-radius:99px;background:rgba(201,145,61,.1);border:1px solid rgba(201,145,61,.35);color:var(--gold);font-weight:600;letter-spacing:.03em}
+.cert-sigs{display:flex;justify-content:space-around;margin-top:24px;padding-top:16px;border-top:1px solid var(--border)}
+.cert-sig{text-align:center}
+.cert-sig-line{font-family:'Playfair Display',serif;font-size:16px;color:var(--rose-d);border-bottom:1px solid var(--border2);padding-bottom:3px;margin-bottom:3px;font-style:italic}
+.cert-sig-lbl{font-size:9px;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase}
+.cert-bot{background:linear-gradient(135deg,#2a0e1c,#180810);padding:12px 44px;display:flex;justify-content:space-between;align-items:center;border-top:2px solid var(--gold)}
+.cert-id{font-family:'JetBrains Mono',monospace;font-size:10px;color:#f0c8d2;font-weight:700}
+.cert-date{font-size:10px;color:var(--gold);letter-spacing:.04em}
+.print-btn{margin-top:20px;background:linear-gradient(135deg,var(--rose),var(--gold));color:#fff;border:none;padding:10px 28px;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.04em;display:flex;align-items:center;gap:7px;transition:all .2s}
+.print-btn:hover{box-shadow:0 6px 22px rgba(200,80,106,.4);transform:translateY(-2px)}
+
+@media print{
+  #sidebar{display:none!important}
+  #main{overflow:visible;padding:0;background:#fff}
+  .pdf-page{box-shadow:none;margin:0}
+  .ch-nav,.lab,.term-wrap{display:none!important}
+  #cert-view{padding:0}
+  .print-btn{display:none}
+}
+
+/* DEEP COURSE ADDITIONS */
+.deep-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.deep-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:13px 14px;box-shadow:0 2px 12px rgba(45,10,20,.05)}
+.deep-card strong{display:block;color:var(--rose-d);font-size:12px;margin-bottom:4px;letter-spacing:.02em}
+.deep-card span{font-size:12.5px;color:var(--ink2);line-height:1.65}
+.deep-note{background:linear-gradient(135deg,#fff7fa,#fffaf2);border:1.5px solid rgba(200,80,106,.28);border-radius:10px;padding:14px 16px;margin:14px 0;font-size:13px;line-height:1.75;color:var(--ink2)}
+.deep-note b{color:var(--ink)}
+.deep-scenario{background:#0b0610;border:1px solid #3a1828;border-radius:10px;padding:14px 16px;margin:14px 0;color:#f7dce4;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.8}
+.deep-scenario .bad{color:#ff8898;font-weight:700}.deep-scenario .ok{color:#7adcaa;font-weight:700}.deep-scenario .warn{color:#f0c060;font-weight:700}
+.wlc-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0}.wlc-flow div{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;font-size:11px;color:var(--ink2);line-height:1.45}.wlc-flow strong{display:block;color:var(--rose-d);font-size:12px;margin-bottom:4px}
+@media(max-width:760px){.deep-grid,.wlc-grid{grid-template-columns:1fr}.wlc-flow{grid-template-columns:1fr 1fr}.pdf-body{padding:30px 26px}.wlc-h1{font-size:30px}}
+.nav-btn.locked-next{opacity:.45;cursor:not-allowed;filter:grayscale(.3)}
+
+/* RESPONSIVIDADE FINAL */
+img,svg,canvas{max-width:100%;height:auto}
+.ch-tbl{display:block;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}
+.diagram,.code,.term-body,.sub-res{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.q-opt{overflow-wrap:anywhere}
+@media (max-width:1024px){#sidebar{width:238px;min-width:238px}.pdf-page,#welcome-view,.ch-nav{max-width:720px}.pdf-body{padding:34px 38px 28px}}
+@media (max-width:860px){body{display:block;height:auto;min-height:100vh;overflow:auto;background:linear-gradient(135deg,#2a0b17,#3a1020 45%,#210812)}#sidebar{position:sticky;top:0;z-index:50;width:100%;min-width:100%;max-height:46vh;border-right:0;border-bottom:1px solid var(--sb2);box-shadow:0 8px 28px rgba(0,0,0,.25)}.sb-logo{padding:12px 14px 10px}.sb-logo-row{margin-bottom:0}.sb-icon{width:30px;height:30px;font-size:14px}.sb-title{font-size:12px}.sb-sub{font-size:8.5px;color:#f2c9d4;font-weight:700}.sb-prog{padding:8px 14px}.sb-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px;max-height:30vh;overflow-y:auto;padding:6px 6px 8px}.sb-sec{grid-column:1/-1;padding:8px 10px 2px;color:#f2c9d4}.nav-item{padding:8px 9px;border-left:0;border-radius:8px;background:rgba(255,255,255,.025)}.nav-item.active{border-left:0;outline:1px solid rgba(200,80,106,.45)}.n-title{font-size:10px;line-height:1.25;color:#f5d4dd}.n-num{width:19px;height:19px;font-size:8.5px}#main{min-height:auto;overflow:visible;padding:16px 12px 28px}#welcome-view,.pdf-page,.ch-nav{width:100%;max-width:100%}.pdf-page{margin-bottom:16px;border-radius:8px}.pdf-hd{padding:10px 14px;gap:10px;align-items:flex-start}.pdf-hd-brand{font-size:8.8px;line-height:1.35}.pdf-hd-ch{font-size:8.8px;line-height:1.35;text-align:right}.pdf-body{padding:22px 18px 20px}.pdf-ft{padding:9px 14px;gap:8px}.pdf-ft-l,.pdf-ft-r{font-size:8px;line-height:1.3}.ch-h1{font-size:24px;line-height:1.15}.ch-sub{font-size:13px}.ch-h2{font-size:17px;margin:20px 0 8px}.ch-h3{font-size:12.5px}.ch-p,ul.ch-ul li{font-size:13px;line-height:1.75}.box{padding:11px 12px;gap:8px}.box-txt{font-size:12.5px}.diagram{font-size:10.5px;line-height:1.75;text-align:left}.net-d{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;padding:12px}.nn{font-size:10px;white-space:nowrap;padding:6px 10px}.lab{padding:16px 14px;margin:16px 0}.lab-title{font-size:14px}.lab-desc{font-size:12.5px}.term-body{font-size:10.5px;line-height:1.75;max-height:260px}.term-in-row{padding:8px 12px}.t-input,.t-prompt{font-size:10.5px}.t-run{padding:5px 10px}.quiz{padding:16px 14px;margin:16px 0}.quiz-ttl{font-size:15px}.q-text{font-size:13px}.q-opt{font-size:12.5px;padding:9px 10px;align-items:flex-start}.q-lt{width:19px;height:19px;font-size:9px;margin-top:1px}.q-sub{align-items:stretch}.q-btn{width:100%;padding:10px 18px}.ports-g{grid-template-columns:repeat(2,minmax(0,1fr))}.band-viz,.cable-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.band-card,.cable-c{min-width:0}.sub-row{display:block}.sub-lbl{display:block;margin-bottom:5px}.sub-inp{width:100%;margin-bottom:8px}.calc-btn{width:100%;margin-left:0!important;padding:9px 18px}.wlc-hero{padding:36px 24px 30px}.wlc-h1{font-size:31px}.wlc-sub{font-size:13px}.wlc-stats{gap:14px}.wlc-stat strong{font-size:22px}.wlc-body{padding:26px 22px 30px}.wlc-grid{grid-template-columns:1fr}.start-btn{padding:13px;font-size:13px}.ch-nav{gap:10px;padding-bottom:18px}.nav-btn{flex:1;justify-content:center;padding:10px 12px;font-size:12px}#cert-view{padding:20px 12px;width:100%}.cert-wrap{max-width:100%;border-width:2px}.cert-top{padding:18px 22px}.cert-course{font-size:17px}.cert-body{padding:26px 18px;text-align:center}.cert-inp{width:100%;font-size:21px}.cert-desc{font-size:12.5px;max-width:100%}.cert-skills{gap:5px}.cert-tag{font-size:9px}.cert-sigs{display:block;margin-top:18px}.cert-sig{margin-bottom:14px}.cert-bot{padding:12px 18px;display:block;text-align:center}.cert-id,.cert-date{display:block;margin:3px 0}.print-btn{width:100%;justify-content:center}}
+@media (max-width:520px){#sidebar{max-height:50vh}.sb-nav{grid-template-columns:1fr;max-height:34vh}.pdf-body{padding:20px 15px 18px}.pdf-hd{display:block}.pdf-hd-ch{display:block;text-align:left;margin-top:4px}.ch-h1{font-size:22px}.ch-sub{font-size:12.5px}.ch-h2{font-size:16px}.ch-p,ul.ch-ul li{font-size:12.8px}.ch-tbl{font-size:11.5px}.ch-tbl th,.ch-tbl td{padding:7px 9px}.ports-g,.band-viz,.cable-row{grid-template-columns:1fr}.term-body{font-size:10px;max-height:280px}.q-opt{font-size:12px}.wlc-hero{padding:32px 20px 28px}.wlc-h1{font-size:28px}.wlc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.wlc-stat strong{font-size:20px}.wlc-stat span{font-size:8.5px}.wlc-body{padding:24px 18px 28px}.ch-nav{flex-direction:column}.nav-btn{width:100%}.cert-course{font-size:16px}.cert-inp{font-size:19px}}
+
+</style>
+</head>
+<body>
+<nav id="sidebar">
+  <div class="sb-logo">
+    <div class="sb-logo-row">
+      <div class="sb-icon">🛡</div>
+      <div><div class="sb-title">Redes para Cibersegurança</div><div class="sb-sub">2026</div></div>
+    </div>
+  </div>
+  <div class="sb-prog">
+    <div class="sb-prog-row"><span>Progresso</span><span id="prog-pct">0%</span></div>
+    <div class="sb-bar-bg"><div class="sb-bar-fill" id="prog-fill" style="width:0%"></div></div>
+  </div>
+  <div class="sb-nav" id="sb-nav"></div>
+</nav>
+<main id="main">
+  <div id="welcome-view"></div>
+  <div id="ch-view" style="display:none;flex-direction:column;align-items:center;width:100%"></div>
+  <div id="cert-view"></div>
+</main>
+<script>
+/* ══ Camada simples de ofuscação local: índices e comentários do quiz não ficam legíveis no código-fonte. ══ */
+const BK=0x4E;
+function enc(a,qi,ci){const s=((qi*7+ci*13)&0xFF),k=BK^s,v=a^k,b=new Uint8Array([s,v]);return btoa(String.fromCharCode(...b))}
+function dec(e){const r=atob(e),s=r.charCodeAt(0),v=r.charCodeAt(1);return v^(BK^s)}
+function decS(e,qi,ci){
+  const raw=atob(e),s=raw.charCodeAt(0),k=(BK^s^((qi+17)&0xFF)^((ci+31)&0xFF));
+  const bytes=Uint8Array.from(raw.slice(1),ch=>ch.charCodeAt(0)^k);
+  return new TextDecoder().decode(bytes);
+}
+
+/* ══ STATE ══ */
+const ST={cur:-1,done:JSON.parse(localStorage.getItem('rn_d')||'[]'),scores:JSON.parse(localStorage.getItem('rn_s')||'{}')};
+function save(){localStorage.setItem('rn_d',JSON.stringify(ST.done));localStorage.setItem('rn_s',JSON.stringify(ST.scores))}
+
+/* ══ CHAPTERS ══ */
+const CHS=[
+  {id:0,title:'Modelos OSI e TCP/IP',sub:'Encapsulamento e 3-Way Handshake',dom:1,min:3,fn:ch0},
+  {id:1,title:'Endereçamento IP e Subnetting',sub:'IPv4, IPv6, CIDR, VLSM, NAT/PAT',dom:1,min:3,fn:ch1},
+  {id:2,title:'Protocolos e Serviços',sub:'DNS, DHCP, NTP, SMTP, SNMP, Syslog',dom:1,min:3,fn:ch2},
+  {id:3,title:'Switching e VLANs',sub:'MAC table, 802.1Q, STP, LACP',dom:2,min:3,fn:ch3},
+  {id:4,title:'Roteamento',sub:'Estático, OSPF, BGP conceitual',dom:2,min:3,fn:ch4},
+  {id:5,title:'Cabeamento e Conectores',sub:'Cat6A, fibra, PoE, SFP, RJ-45',dom:2,min:3,fn:ch5},
+  {id:6,title:'Wireless (WLAN)',sub:'802.11ax, WPA3, canais, site survey',dom:2,min:3,fn:ch6},
+  {id:7,title:'WAN, VPN e Acesso Remoto',sub:'SD-WAN, MPLS, IPSec, WireGuard',dom:2,min:3,fn:ch7},
+  {id:8,title:'Operações e Documentação',sub:'IPAM, diagramas, monitoramento, ITIL',dom:3,min:3,fn:ch8},
+  {id:9,title:'Segurança em Camadas',sub:'Firewalls, IDS/IPS, DMZ, Zero Trust',dom:4,min:3,fn:ch9},
+  {id:10,title:'Ataques e Ameaças em Redes',sub:'MITM, DoS, scanning, spoofing',dom:4,min:3,fn:ch10},
+  {id:11,title:'Análise de Tráfego e Forense',sub:'Wireshark, Zeek, NetFlow, IoCs',dom:4,min:3,fn:ch11},
+  {id:12,title:'Troubleshooting Sistematizado',sub:'7 passos de diagnóstico ',dom:5,min:3,fn:ch12},
+];
+const DN={1:'Dom 1 · Fundamentos',2:'Dom 2 · Implementação',3:'Dom 3 · Operações',4:'Dom 4 · Segurança',5:'Dom 5 · Troubleshooting'};
+const DW={1:'23%',2:'20%',3:'18%',4:'22%',5:'17%'};
+
+/* ══ PAGE BUILDER ══ */
+function mkPage(hdR,pg,body){
+  const d=document.createElement('div');
+  d.className='pdf-page';
+  d.innerHTML=`<div class="pdf-hd"><span class="pdf-hd-brand">Redes para Cibersegurança · 2026</span><span class="pdf-hd-ch">${hdR}</span></div><div class="pdf-body">${body}</div><div class="pdf-ft"><span class="pdf-ft-l">🛡 Redes para Cibersegurança · 2026</span><div class="pdf-ft-pg">${pg}</div><span class="pdf-ft-r">© 2026</span></div>`;
+  return d;
+}
+
+/* ══ QUIZ BUILDER · CTF MODE ══ */
+const QA={},QS={},QMAP={},QSEC={};
+const _ss=(()=>{let v=sessionStorage.getItem('rn_sx');if(!v){v=(crypto.getRandomValues(new Uint32Array(2))[0].toString(36)+Date.now().toString(36));sessionStorage.setItem('rn_sx',v)}return v})();
+function _h(x){let h=2166136261;for(let i=0;i<x.length;i++){h^=x.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function _r(ci,qi,n){let x=_h(_ss+'|'+ci+'|'+qi+'|'+n);x^=x<<13;x^=x>>>17;x^=x<<5;return (x>>>0)}
+function _rv(s){return String(s).split('').reverse().join('')}
+function _esc(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function mkQuiz(ci,qs){
+  QMAP[ci]={};QSEC[ci]={};
+  const h=qs.map((q,qi)=>{
+    QSEC[ci][qi]={a:_rv(q._2),x:_rv(q._3)};
+    const arr=q._1.map((v,i)=>({v,i}));
+    for(let n=arr.length-1;n>0;n--){const j=_r(ci,qi,n)%(n+1);[arr[n],arr[j]]=[arr[j],arr[n]]}
+    QMAP[ci][qi]=arr.map(x=>x.i);
+    return`<div class="q-block" id="qb-${ci}-${qi}"><div class="q-text">${qi+1}. ${_esc(q._0)}</div><div class="q-opts">${arr.map((o,di)=>`<div class="q-opt" id="qo-${ci}-${qi}-${di}" onclick="selQ(${ci},${qi},${di})"><div class="q-lt">${'ABCD'[di]}</div>${_esc(o.v)}</div>`).join('')}</div><div class="q-fb" id="qfb-${ci}-${qi}"></div></div>`;
+  }).join('');
+  return`<div class="quiz" id="quiz-${ci}"><div class="quiz-ttl">📝 Quiz — ${CHS[ci].title}</div>${h}<div class="q-sub"><span class="q-score-txt" id="qsc-${ci}"></span><button class="q-btn" id="qbtn-${ci}" onclick="subQ(${ci},${qs.length})" disabled>Verificar</button></div></div>`;
+}
+function selQ(ci,qi,di){
+  if(QS[ci]!==undefined)return;
+  if(!QA[ci])QA[ci]={};
+  const oi=(QMAP[ci]&&QMAP[ci][qi])?QMAP[ci][qi][di]:di;
+  QA[ci][qi]={di,oi};
+  document.querySelectorAll(`[id^="qo-${ci}-${qi}-"]`).forEach(e=>e.classList.remove('sel'));
+  document.getElementById(`qo-${ci}-${qi}-${di}`)?.classList.add('sel');
+  const tot=document.querySelectorAll(`[id^="qb-${ci}-"]`).length;
+  if(Object.keys(QA[ci]).length>=tot)document.getElementById(`qbtn-${ci}`).disabled=false;
+}
+function subQ(ci,tot){
+  if(QS[ci]!==undefined)return;
+  const ans=QA[ci]||{};let sc=0;
+  for(let qi=0;qi<tot;qi++){
+    const a=ans[qi], sec=QSEC[ci]&&QSEC[ci][qi];if(!a||!sec)continue;
+    const cor=dec(sec.a),ok=a.oi===cor;if(ok)sc++;
+    const exp=decS(sec.x,qi,ci);
+    for(let di=0;di<4;di++){const el=document.getElementById(`qo-${ci}-${qi}-${di}`);if(!el)continue;const orig=(QMAP[ci]&&QMAP[ci][qi])?QMAP[ci][qi][di]:di;if(orig===cor)el.classList.add('right');else if(di===a.di&&!ok)el.classList.add('wrong');el.style.pointerEvents='none';}
+    const fb=document.getElementById(`qfb-${ci}-${qi}`);
+    if(fb){fb.className=`q-fb show ${ok?'ok':'fail'}`;fb.innerHTML=(ok?'✅ Correto! ':'❌ Incorreto. ')+_esc(exp);}
+  }
+  QS[ci]=sc;
+  const scEl=document.getElementById(`qsc-${ci}`);if(scEl)scEl.textContent=`Pontuação: ${sc}/${tot}`;
+  document.getElementById(`qbtn-${ci}`)?.setAttribute('disabled','');
+  if(sc>=CHS[ci].min){if(!ST.done.includes(ci))ST.done.push(ci);ST.scores[ci]=sc;save();renderNav();setTimeout(()=>passBanner(ci,sc,tot),350);}
+  else{setTimeout(()=>{const b=document.createElement('div');b.style.cssText='background:rgba(200,80,106,.07);border:1px solid rgba(200,80,106,.28);border-radius:8px;padding:12px 16px;margin-top:12px;font-size:13px;color:#7a1030;line-height:1.7;';b.innerHTML=`❌ ${sc}/${tot} — mínimo ${CHS[ci].min}. <a href="#" onclick="goTo(${ci});return false;" style="color:var(--rose);font-weight:700;">Tentar novamente</a>`;document.getElementById(`quiz-${ci}`)?.appendChild(b);},300);}
+}
+function passBanner(ci,sc,tot){
+  const isLast=ci===CHS.length-1;
+  const b=document.createElement('div');
+  b.style.cssText='background:linear-gradient(135deg,rgba(201,145,61,.1),rgba(200,80,106,.07));border:1.5px solid rgba(201,145,61,.35);border-radius:10px;padding:16px 20px;margin-top:12px;display:flex;gap:12px;align-items:center;';
+  b.innerHTML=`<div style="font-size:28px">🎉</div><div><div style="font-family:Playfair Display,serif;font-size:15px;color:#1a0a06;margin-bottom:3px">Capítulo concluído! ${sc}/${tot}</div><div style="font-size:13px;color:#8a6848">${isLast?'Curso completo! Gere seu certificado.':'Próximo capítulo desbloqueado!'}</div></div>${isLast?`<button onclick="showCert()" style="margin-left:auto;background:linear-gradient(135deg,#c8506a,#c9913d);color:#fff;border:none;padding:8px 18px;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;">🏆 Certificado</button>`:`<button onclick="goTo(${ci+1})" style="margin-left:auto;background:linear-gradient(135deg,#c8506a,#c9913d);color:#fff;border:none;padding:8px 18px;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;">Próximo →</button>`}`;
+  document.getElementById(`quiz-${ci}`)?.appendChild(b);
+}
+// barreira casual contra cola por seleção/menu; não é segurança criptográfica, é fricção de UX.
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('copy',e=>{const t=String(window.getSelection()||'');if(t&&/Quiz|Correto|Incorreto|Pontuação/.test(t))e.preventDefault();});
+
+/* ══ TERMINAL ══ */
+const TCMDS={};
+function mkTerm(id,init,cmds){
+  TCMDS[id]=cmds;
+  return`<div class="term-wrap"><div class="term-bar"><div class="td td-r"></div><div class="td td-y"></div><div class="td td-g"></div><span class="term-ttl">terminal · ${id}</span></div><div class="term-body" id="tb-${id}">${init.map(l=>`<div class="${l.c}">${l.t}</div>`).join('')}</div><div class="term-in-row"><span class="t-prompt">$ </span><input class="t-input" id="ti-${id}" placeholder="comando..." onkeydown="if(event.key==='Enter')runT('${id}')"><button class="t-run" onclick="runT('${id}')">↵</button></div></div>`;
+}
+function runT(id){
+  const inp=document.getElementById(`ti-${id}`),body=document.getElementById(`tb-${id}`);
+  if(!inp||!body)return;
+  const cmd=inp.value.trim().toLowerCase();if(!cmd)return;
+  const l=document.createElement('div');l.innerHTML=`<span class="t-cmd">$ ${inp.value.trim()}</span>`;body.appendChild(l);
+  const cmds=TCMDS[id]||{},res=document.createElement('div');
+  if(cmds[cmd]){res.innerHTML=cmds[cmd]();res.className='t-out';}
+  else{res.innerHTML=`<span class="t-err">Comando não reconhecido: ${cmd}. Digite 'help'</span>`;}
+  body.appendChild(res);body.scrollTop=body.scrollHeight;inp.value='';
+}
+
+/* ══ CHAPTER 0: OSI ══ */
+function ch0(c){
+  c.appendChild(mkPage('Cap.1 · OSI e TCP/IP','1',`
+<div class="dom-badge dom-1">Domínio 1 · Fundamentos · 23%</div>
+<div class="ch-eye">Capítulo 1</div><h1 class="ch-h1">Modelos OSI e TCP/IP</h1>
+<div class="ch-sub">Encapsulamento, fluxo de dados e 3-Way Handshake TCP</div><div class="ch-div"></div>
+<p class="ch-p">Os modelos OSI e TCP/IP são os <strong>alicerces conceituais</strong> de toda comunicação em rede. Para segurança, saber em qual camada um ataque ocorre define a estratégia de defesa.</p>
+<h2 class="ch-h2">Modelo OSI — 7 Camadas Interativas</h2>
+<p class="ch-p" style="font-size:12px">Clique em cada camada para ver protocolos e ameaças:</p>
+<div id="osi-int">${[
+  {n:7,nm:'Aplicação',c:'#c8506a',bg:'#fef3f6',pr:'HTTP/S, DNS, FTP, SSH, SMTP, SNMP, Syslog',sec:'SQLi, XSS, phishing, DNS tunneling'},
+  {n:6,nm:'Apresentação',c:'#c9913d',bg:'#fefaf3',pr:'TLS/SSL, JPEG, MPEG, ASCII, Base64',sec:'SSL stripping, encoding attacks'},
+  {n:5,nm:'Sessão',c:'#7a6aaa',bg:'#f6f3fe',pr:'NetBIOS, RPC, SMB sessions, NFS',sec:'Session hijacking, replay attacks'},
+  {n:4,nm:'Transporte',c:'#3a8a5a',bg:'#f3fef6',pr:'TCP, UDP, SCTP — portas 0–65535',sec:'SYN flood, port scan, UDP flood'},
+  {n:3,nm:'Rede',c:'#2a6aaa',bg:'#f3f8fe',pr:'IPv4, IPv6, ICMP, ARP, OSPF, BGP',sec:'IP spoofing, ICMP redirect, route poisoning'},
+  {n:2,nm:'Enlace',c:'#6a4a2a',bg:'#fef8f3',pr:'Ethernet, 802.11, MAC, 802.1Q, STP',sec:'ARP poisoning, VLAN hopping, MAC flooding'},
+  {n:1,nm:'Física',c:'#5a5a5a',bg:'#f8f8f8',pr:'UTP/STP/fibra, hubs, sinais de rádio',sec:'Tap físico, jamming, interferência EMI'},
+].map(l=>`<div class="osi-row" style="background:${l.bg}" onclick="togOsi(${l.n})"><div class="osi-n" style="background:${l.c};color:#fff">${l.n}</div><div class="osi-inf"><strong>${l.nm}</strong><span>${l.pr}</span></div></div><div class="osi-det" id="od-${l.n}"><strong>Protocolos:</strong> ${l.pr}<br><strong style="color:var(--rose)">Ataques:</strong> ${l.sec}</div>`).join('')}</div>
+<div class="box box-gold"><div class="box-icon">🔑</div><div class="box-txt"><strong>Dica SOC:</strong> Ao receber um alert, pergunte: "Em qual camada OSI está o problema?" Isso direciona a investigação imediatamente.</div></div>`));
+
+  c.appendChild(mkPage('Cap.1 · TCP/IP e Handshake','2',`
+<h2 class="ch-h2">TCP/IP — O Modelo Prático (4 camadas)</h2>
+<table class="ch-tbl"><thead><tr><th>Camada TCP/IP</th><th>OSI equivale</th><th>Protocolos</th><th>Ataque comum</th></tr></thead><tbody>
+<tr><td><strong>Aplicação</strong></td><td>5,6,7</td><td>HTTP, DNS, SSH, FTP, SMTP</td><td>Web attacks, DNS poisoning</td></tr>
+<tr><td><strong>Transporte</strong></td><td>4</td><td>TCP, UDP</td><td>Port scan, SYN flood</td></tr>
+<tr><td><strong>Internet</strong></td><td>3</td><td>IP, ICMP, ARP</td><td>IP spoofing, MITM</td></tr>
+<tr><td><strong>Acesso à Rede</strong></td><td>1,2</td><td>Ethernet, Wi-Fi, MAC</td><td>ARP poison, tap físico</td></tr></tbody></table>
+<h2 class="ch-h2">Encapsulamento de Dados</h2>
+<div class="diagram">[APP] dados HTTP "GET /index.html"<br>↓ + Header TCP (porta src:51234 → dst:443)<br>↓ + Header IP (src:10.0.0.5 → dst:142.250.80.46)<br>↓ + Header Ethernet (MAC src → MAC dst)<br>📦 <strong>Frame pronto para transmissão física</strong></div>
+<h2 class="ch-h2">TCP 3-Way Handshake</h2>
+<div class="diagram">Cliente → Servidor: <strong style="color:#c8506a">SYN</strong> (seq=1000)<br>Servidor → Cliente: <strong style="color:#c9913d">SYN-ACK</strong> (seq=5000, ack=1001)<br>Cliente → Servidor: <strong style="color:#3a8a5a">ACK</strong> (seq=1001, ack=5001)<br>── Conexão ESTABLISHED ──<br><span style="font-size:11px;color:#8a6848">SYN sem ACK = half-open = vetor de SYN Flood (DoS)</span></div>
+<div class="lab"><div class="lab-hd"><span class="lab-badge">⚗ Lab 1.1</span><span class="lab-title">TCP/IP no Terminal</span></div><div class="lab-desc">Simule diagnósticos TCP e visualize o handshake.</div>
+${mkTerm('t-osi',[
+  {c:'t-out',t:'# Lab 1.1 — TCP/IP e Modelo OSI'},
+  {c:'t-cm', t:'# Comandos: help, netstat, handshake, layers, flags, encap'},
+],{
+help:()=>`<span class="t-hl">Comandos disponíveis:</span>
+<span class="t-ok">netstat</span>    → conexões TCP ativas
+<span class="t-ok">handshake</span>  → simula 3-way handshake
+<span class="t-ok">layers</span>     → resumo 7 camadas OSI
+<span class="t-ok">flags</span>      → flags TCP em segurança
+<span class="t-ok">encap</span>      → visualiza encapsulamento`,
+netstat:()=>`<span class="t-hl">Proto  Local                Remoto              Estado</span>
+<span class="t-ok">TCP    0.0.0.0:80</span>          0.0.0.0:0           LISTENING    <span class="t-cm">← HTTP</span>
+<span class="t-ok">TCP    0.0.0.0:443</span>         0.0.0.0:0           LISTENING    <span class="t-cm">← HTTPS/TLS</span>
+<span class="t-err">TCP    0.0.0.0:23</span>          0.0.0.0:0           LISTENING    <span class="t-cm">← ALERTA Telnet!</span>
+<span class="t-ok">TCP    10.0.0.5:52341</span>       8.8.8.8:53          ESTABLISHED  <span class="t-cm">← DNS</span>`,
+handshake:()=>`<span class="t-hl">TCP 3-Way Handshake Simulado:</span>
+<span class="t-cmd">[192.168.1.10]</span> ──SYN(seq=1000)────────────► <span class="t-ok">[10.0.0.1:443]</span>
+<span class="t-cmd">[192.168.1.10]</span> ◄──SYN-ACK(seq=5000,ack=1001) <span class="t-ok">[10.0.0.1:443]</span>
+<span class="t-cmd">[192.168.1.10]</span> ──ACK(seq=1001,ack=5001)──────► <span class="t-ok">[10.0.0.1:443]</span>
+<span class="t-ok">✓ Conexão ESTABLISHED. RTT: 4ms</span>
+<span class="t-cm">  SYN scan: SYN → SYN-ACK → RST (nunca completa)</span>`,
+layers:()=>`<span class="t-hl">OSI 7 Camadas:</span>
+7 <span class="t-ok">Aplicação   </span>— HTTP, DNS, SSH, SMTP
+6 <span class="t-ok">Apresentação</span>— TLS, codificação
+5 <span class="t-ok">Sessão      </span>— NetBIOS, RPC
+4 <span class="t-ok">Transporte  </span>— TCP, UDP (portas!)
+3 <span class="t-info">Rede        </span>— IP, ICMP, roteamento
+2 <span class="t-info">Enlace      </span>— MAC, Ethernet, Wi-Fi
+1 <span class="t-info">Física      </span>— cabos, sinais`,
+flags:()=>`<span class="t-hl">Flags TCP em segurança:</span>
+<span class="t-ok">SYN </span>— iniciar conexão | SYN flood → DoS
+<span class="t-ok">ACK </span>— confirmar recebimento
+<span class="t-ok">FIN </span>— encerrar gracioso
+<span class="t-err">RST </span>— reset forçado | usado em stealth scan
+<span class="t-err">URG </span>— urgente | raramente legítimo
+<span class="t-cm">  NULL scan (zero flags) — evade alguns firewalls</span>`,
+encap:()=>`<span class="t-hl">Encapsulamento "GET /index.html":</span>
+L7 <span class="t-ok">[HTTP]</span> GET /index.html HTTP/1.1
+L4 <span class="t-ok">[TCP ]</span> sport:51234 dport:80 flags:SYN-ACK
+L3 <span class="t-info">[IP  ]</span> src:10.0.0.5 dst:142.250.80.46
+L2 <span class="t-info">[ETH ]</span> src:aa:bb:cc:11:22:33 dst:ff:fe:00:aa
+L1 <span class="t-cm">[PHY ]</span> sinais elétricos/ópticos/rádio`,
+})}</div>`));
+
+  c.appendChild(mkPage('Cap.1 · Quiz','3',mkQuiz(0,[
+    {_0:'Em qual camada OSI o endereço MAC opera?',_1:['Camada 1 — Física','Camada 2 — Enlace','Camada 3 — Rede','Camada 4 — Transporte'],_2:'=8EA',_3:'==gbQkAYz8y5DWiMlQiLlA2Lk4SIzUDYzBWIkESLhMCYtUCYtEiMlAzLgNTJy8CJhUCNvIBYu9CNuUSLnUyMg9SLzUSLg9CJg9iM04SJkAWInUiM04SJgFiMhADYvQSIzUBYuVyIhwiLFAG1ALKYyBWIkESLhMAYh4CYlITI3QiMhgCYlQCYy8CJhMSKmkCNuUCJpAWL1AW6DC2AB0AA'},
+    {_0:'O TCP garante entrega confiável porque:',_1:['Prioriza velocidade sem estado','Confirma segmentos e ordenação','Opera apenas dentro da LAN','Ignora o cabeçalho IP'],_2:'=g0B',_3:'=o2Kg0CNlfoNkdTLlkCZ3USKkhSIyU+htIiKrcSarc+hqQW7HSGFAEBZqVCMhYjNrcCZpECI2sCZloCZlMSI2AjKhQmNtAjKlYTJjQWJ2UCNk12DHUAbkdTIxf44HWSK20iIqsyJkFCZl0yJq4+hxUTI3QWIgQ2NrYTIp4/hqQWJ3EDZo9wBFs2DHUQaK0xFrpQHXQWKrcCZl0yJtoSLk53KnfIPhoyKnQWJktCIlAjKh0iNrQW7HSGFHAxB'},
+    {_0:'IP Spoofing explora qual camada OSI?',_1:['Camada 7 — Aplicação','Camada 4 — Transporte','Camada 3 — Rede','Camada 2 — Enlace'],_2:'=IkD',_3:'i1SIlgT4PqDbtESOs1iPtwDb/0CO/MCP/kiPs1iIjUyLp4TJokiPslzIsFSKrUiPjwWLs1iPt8yPtECbpgjIt8SL40CbDwmYllCKp4BZs9HbtgSLh0yDshNzuyGHFw2IkASLr/YKu0yLsNiIsFSKrUiPjwWKowGHFw2Ir/YK+kCKikCbjwWLvUiKl8DItoCbrISJqMyI88BbcUgD'},
+    {_0:'SYN flood é eficaz porque:',_1:['Criptografa fluxos TCP','Mantém conexões half-open','Rebaixa TLS para HTTP','Altera o MAC do gateway'],_2:'=oVF',_3:'=43I/0TOk0/k3UDPwNyP5IS8TWyIlAXMw9z9TmjJiUzIw9DN+EzN14Dc1A3I1U+koUjP/MDc1QDcxwTNyEDJwFDc/QjPxQyP3MSNwxXPlAXM0EzMwFjIxACc+UDI/0nN8EDOw9DNxQyI1AXP5PJJ+ETPwJyP0kjJiUzIw9Bc+txER0nHJMAc/AnI1QjP/AyI1ICc9UzIw5RCDAXN0A3Ix4TNk4TNzAXM5YiP1AHN/8DPWAnHJMQF'},
+    {_0:'Qual modelo descreve o fluxo real de dados na internet com 4 camadas?',_1:['OSI','IEEE 802.11','TCP/IP','IETF RFC 791'],_2:'=AFH',_3:'==gdrkDP5UTO7g3b4VzN7gHN50CLx0zO2czO4dDN9wzN1gX8biXELcBe21DP9oAe4vJe3syK9sTG41Des0jNq0DL2EBe01DLqcDKrYTOqwAe0dz+b+/m5sTM0gSG4J2K5wTO1kzO4xGe1czO4xSP2oSPsYTM4ljN4dDP5wiN9UTP0gSNxg3N00DP3UDe3gX8biXc00DP3UDeccDHwhHCRcHCbwAe3QTP8cTN4dBH'},
+  ])));
+}
+
+/* ══ CHAPTER 1: IP ══ */
+function ch1(c){
+  c.appendChild(mkPage('Cap.2 · Endereçamento IP','4',`
+<div class="dom-badge dom-1">Domínio 1 · Fundamentos</div>
+<div class="ch-eye">Capítulo 2</div><h1 class="ch-h1">Endereçamento IP e Subnetting</h1>
+<div class="ch-sub">IPv4, IPv6, CIDR, VLSM, NAT/PAT — a língua das redes</div><div class="ch-div"></div>
+<p class="ch-p">Calcular subnets é <strong>habilidade obrigatória</strong> para network admins e analistas de segurança. Segmentação correta limita o blast radius de ataques internos.</p>
+<h2 class="ch-h2">Estrutura IPv4</h2>
+<div class="diagram"><strong style="color:#c8506a">192</strong>.<strong style="color:#c9913d">168</strong>.<strong style="color:#3a8a5a">10</strong>.<strong style="color:#2a6aaa">50</strong><br>11000000.10101000.00001010.00110010<br><span style="font-size:11px;color:#8a6848">4 octetos × 8 bits = 32 bits total</span></div>
+<h2 class="ch-h2">Faixas Especiais IPv4</h2>
+<table class="ch-tbl"><thead><tr><th>Faixa</th><th>CIDR</th><th>Uso</th><th>Segurança</th></tr></thead><tbody>
+<tr><td>10.0.0.0</td><td>/8</td><td>Redes corporativas</td><td>RFC 1918 — não roteável na internet</td></tr>
+<tr><td>172.16–31.x.x</td><td>/12</td><td>Médias empresas</td><td>RFC 1918</td></tr>
+<tr><td>192.168.0.0</td><td>/16</td><td>SOHO / doméstico</td><td>RFC 1918</td></tr>
+<tr><td>169.254.0.0</td><td>/16</td><td>APIPA link-local</td><td>DHCP falhou — investigar!</td></tr>
+<tr><td>127.0.0.0</td><td>/8</td><td>Loopback</td><td>Tráfego nunca sai da máquina</td></tr>
+<tr><td>0.0.0.0/0</td><td>/0</td><td>Rota padrão</td><td>Default gateway / rota de último recurso</td></tr></tbody></table>
+<h2 class="ch-h2">Tabela CIDR Essencial</h2>
+<table class="ch-tbl"><thead><tr><th>CIDR</th><th>Máscara</th><th>Hosts úteis</th><th>Uso</th></tr></thead><tbody>
+<tr><td>/8</td><td>255.0.0.0</td><td>16.777.214</td><td>ISPs, grandes orgs</td></tr>
+<tr><td>/16</td><td>255.255.0.0</td><td>65.534</td><td>Campus, data center</td></tr>
+<tr><td>/24</td><td>255.255.255.0</td><td>254</td><td>VLAN por departamento</td></tr>
+<tr><td>/25</td><td>255.255.255.128</td><td>126</td><td>Segmentos médios</td></tr>
+<tr><td>/26</td><td>255.255.255.192</td><td>62</td><td>Segmentos pequenos</td></tr>
+<tr><td>/30</td><td>255.255.255.252</td><td>2</td><td>Links ponto-a-ponto</td></tr>
+<tr><td>/32</td><td>255.255.255.255</td><td>1</td><td>Host único / rota específica</td></tr></tbody></table>
+<div class="box box-rose"><div class="box-icon">🎯</div><div class="box-txt"><strong>Red Team:</strong> IPs privados expostos em headers HTTP ou mensagens de erro revelam a topologia interna da rede alvo.</div></div>`));
+
+  c.appendChild(mkPage('Cap.2 · Calculadora e IPv6','5',`
+<h2 class="ch-h2">🧮 Calculadora de Sub-redes</h2>
+<div class="sub-calc">
+  <div class="sub-row"><span class="sub-lbl">Endereço IP:</span><input class="sub-inp" id="sub-ip" value="192.168.10.0"></div>
+  <div class="sub-row"><span class="sub-lbl">Prefixo CIDR:</span><input class="sub-inp" id="sub-cidr" value="26" style="width:70px"><button class="calc-btn" onclick="calcSub()" style="margin-left:6px">Calcular</button></div>
+  <div class="sub-res" id="sub-res"></div>
+</div>
+<h2 class="ch-h2">NAT e PAT</h2>
+<p class="ch-p"><strong>NAT</strong> traduz IPs privados em públicos. <strong>PAT</strong> (NAT overload) permite múltiplos hosts usarem um único IP público via portas distintas.</p>
+<div class="diagram">192.168.1.10:3300 ──► NAT/PAT: <strong>203.0.113.1:40001</strong> ──► 8.8.8.8:53<br>192.168.1.20:3301 ──► NAT/PAT: <strong>203.0.113.1:40002</strong> ──► 8.8.8.8:53<br><span style="font-size:11px;color:#8a6848">Tabela NAT: IP+porta interna ↔ porta externa pública</span></div>
+<h2 class="ch-h2">IPv6 — Visão Geral</h2>
+<p class="ch-p">IPv6 usa <strong>128 bits</strong> — 340 undecilhões de endereços. Redes que ignoram IPv6 criam bypass de firewall.</p>
+<table class="ch-tbl"><thead><tr><th>Tipo</th><th>Prefixo</th><th>Equivalente IPv4</th><th>Ameaça</th></tr></thead><tbody>
+<tr><td>Loopback</td><td>::1</td><td>127.0.0.1</td><td>—</td></tr>
+<tr><td>Link-local</td><td>fe80::/10</td><td>169.254.x.x</td><td>NDP recon, MITM</td></tr>
+<tr><td>ULA (privado)</td><td>fc00::/7</td><td>RFC 1918</td><td>Segmentação interna</td></tr>
+<tr><td>Global unicast</td><td>2000::/3</td><td>IPs públicos</td><td>Exposto sem NAT!</td></tr>
+<tr><td>Multicast</td><td>ff00::/8</td><td>224.x.x.x</td><td>Neighbor Discovery, MLD</td></tr></tbody></table>
+<div class="box box-rose"><div class="box-icon">⚠️</div><div class="box-txt"><strong>IPv6 Blind Spot:</strong> Firewalls configurados só para IPv4 ignoram tráfego IPv6. Habilite inspeção dual-stack — NGFW obrigatório.</div></div>`));
+
+  c.appendChild(mkPage('Cap.2 · Quiz','6',mkQuiz(1,[
+    {_0:'Quantos hosts utilizáveis existem em uma rede /26?',_1:['64','62','30','126'],_2:'=IUD',_3:'cFwGXQw0xiwGeshBHIVAGEQHaIFQEJ1TSB0XGRkUcFQHWMBBAcRAXAgUAJ1TSZQATEhFT0BAwIVWSdhFXAiUcFQHVH7FAchFcchUGRkUPJ1WEB0XAFkWsAkUPJFRA1VD'},
+    {_0:'Endereço de broadcast de 10.0.0.0/8?',_1:['10.255.255.254','10.255.255.255','10.0.0.255','255.0.0.0'],_2:'=sFF',_3:'=YUXdplRd1lWG1VXaZEWZhUVIlFSF0AScsxBAg0BMg0GcEgCItxBItxBMcAHIVFScsRCLwQCHohKIZEWGhlRYZUXdpFSJoRCLsRyrWASSB1RYZEWGhlRYlFF'},
+    {_0:'O que faz o PAT (Port Address Translation)?',_1:['Traduz públicos para privados','Multiplexa hosts por portas','Bloqueia tráfego externo','Cria túnel entre redes'],_2:'=Q1G',_3:'IVRCQ8gEHQRCWQRCFY0AGVRCF8gEV8cpLkgAGVxAUkgAHMgEJQhRLMgRJUcpUIwB2YESVcQBPgA3laUFHIBFJYhRVcwCGpUCF8gCEwdpWYkNvYUCLUxALYUCGtQCFY0CDcQFGVRCIQxASgwDGVhEVkgDGVRCGVRCCkgMGhUFDMdpeMACJUgRU8wEBgwDSUxDCY0BUcgFGdgEUkgFGNgAGVRCUMwCcXKCGdQFTY0TCcQCKQxAQkgRycCKOZkMnYzG'},
+    {_0:'IP 169.254.x.x em um host indica:',_1:['IP estático válido da rede local','DHCP falhou — APIPA atribuído automaticamente','IPv6 link-local ativo','Endereço de loopback alternativo'],_2:'=0mI',_3:'2ZzL3wDeIsBEcgnK3wTMuoSPrgXL3gHM7wSMvsCe9wDe5wiK3gCe0lDP5oiK9gnFZQhD4xM26inK58TMssSPuYTM41jKoUTPLgndIsBEcgnK3wTMuoSPrg3N4VzN7g3NskDL2czO41TL/0zK2czO4dz+baDe3wjN50SK41DL20TN5sTMskTN3wSL5gXMtoTMqwSO4lTN9wyKxsCeXgndx9jNxsyK9oCP8kBeIEBe9wSOuEjKIg3OxwSO1cDLtkBc4lBCRgQG41zP2kjK4dDexvJegYHI2xWbqZXYulmI'},
+    {_0:'Endereço fe80::1 é qual tipo de IPv6?',_1:['Global unicast','ULA privado','Link-local','Multicast'],_2:'=UWK',_3:'8tnP9ETPm0DICI3KgcDJ9ETI7Yhcg0DM6UzO3wheyJgFcI3P3IXP2MTIHIHf3EzM0AyNmwzOyNjP3Iic3YCP38zMxsjJz8TPmcyMy1jNzAyNVIHf9YzM3YSPgIXPxHJPyZs0wKnPzETP+IXPmwzN/UzNhIXP8IXIzwzNiMjc9YzO+MfkEIHf+MTM94zf5wzO+I3+RKnYj1HaoJma3QTK'},
+  ])));
+}
+
+/* ══ CHAPTER 2: PROTOCOLS ══ */
+function ch2(c){
+  c.appendChild(mkPage('Cap.3 · Protocolos e Serviços','7',`
+<div class="dom-badge dom-1">Domínio 1 · Fundamentos</div>
+<div class="ch-eye">Capítulo 3</div><h1 class="ch-h1">Protocolos e Serviços de Rede</h1>
+<div class="ch-sub">DNS, DHCP, NTP, SMTP, SNMP, Syslog, FTP, SSH — e as portas críticas</div><div class="ch-div"></div>
+<p class="ch-p">Para um analista, <strong>comportamento normal = linha de base</strong>. Qualquer desvio de protocolo é um sinal. Conhecer cada protocolo profundamente é a base da detecção.</p>
+<h2 class="ch-h2">Portas Críticas — Clique para detalhes</h2>
+<div class="ports-g" id="ports-g">${[
+  {p:21,n:'FTP',d:'Transferência de arquivos',sec:'Credenciais plaintext! Use SFTP(22) ou FTPS(990)'},
+  {p:22,n:'SSH',d:'Shell seguro e tunneling',sec:'Força bruta, chaves fracas. Desabilite root login. Use Ed25519'},
+  {p:23,n:'Telnet',d:'Shell legado — OBSOLETO',sec:'TUDO em plaintext. Substituir por SSH. Nunca expor'},
+  {p:25,n:'SMTP',d:'Envio de e-mail',sec:'Open relay → spam. Implemente SPF, DKIM, DMARC'},
+  {p:53,n:'DNS',d:'Resolução de nomes',sec:'Cache poisoning, DNS tunneling (exfiltração/C2)'},
+  {p:67,n:'DHCP',d:'Atribuição automática de IP',sec:'Rogue DHCP server → MITM. Use DHCP Snooping'},
+  {p:80,n:'HTTP',d:'Web sem criptografia',sec:'MITM trivial. Captura de sessões. Forçar HTTPS+HSTS'},
+  {p:123,n:'NTP',d:'Sincronização de tempo',sec:'Amplification DDoS. Tempo errado quebra TLS e logs'},
+  {p:161,n:'SNMP',d:'Gerenciamento de rede',sec:'v1/v2c: community string claro. Use SNMPv3 com auth+crypt'},
+  {p:443,n:'HTTPS',d:'Web com TLS',sec:'SSL stripping, TLS downgrade, cert validation bypass'},
+  {p:445,n:'SMB',d:'Compartilhamento Windows',sec:'EternalBlue! Bloquear 445 na borda. Assinar SMB'},
+  {p:514,n:'Syslog',d:'Logs UDP (cleartext)',sec:'UDP sem auth → log tampering. Use Syslog TLS (6514)'},
+  {p:3389,n:'RDP',d:'Remote Desktop Windows',sec:'BlueKeep, força bruta. NUNCA expor diretamente à internet'},
+  {p:3306,n:'MySQL',d:'Banco de dados',sec:'Nunca expor externamente. Credenciais fortes + firewall de app'},
+  {p:8080,n:'HTTP Alt',d:'Proxy e desenvolvimento',sec:'Frequentemente esquecido em firewalls. Scanners verificam'},
+].map(p=>`<div class="port-c" onclick="showPort(${p.p},'${p.n}','${p.d}','${p.sec}')"><div class="port-n">${p.p}</div><div class="port-nm">${p.n}</div><div class="port-d">${p.d}</div></div>`).join('')}</div>
+<div id="port-detail"></div>`));
+
+  c.appendChild(mkPage('Cap.3 · DNS, DHCP, SNMP · Lab','8',`
+<h2 class="ch-h2">DNS — Processo e Ameaças</h2>
+<div class="diagram">Cliente → Resolver local → Root (.) → TLD (.com) → NS Autoritativo<br>← ← ← Resposta: A=142.250.80.46 ← ← ←<br><span style="font-size:11px;color:#8a6848">UDP/53 queries · TCP/53 zone transfer (AXFR)</span></div>
+<div class="atk"><div class="atk-hd"><span class="atk-badge">⚠ Ataque</span><span class="atk-title">DNS Tunneling — Exfiltração Oculta</span></div>
+<p class="ch-p" style="margin:0">Dados codificados em subdomínios: <code style="font-family:monospace;color:#c8506a;font-size:12px">dGhpcy1pcy1leGZpbHRyYXRlZA.evil.com</code>. Sinais: subdomínios com 50+ chars, alto volume para um domínio, registros TXT enormes.</p></div>
+<h2 class="ch-h2">DHCP — Processo DORA</h2>
+<div class="diagram">1. <strong>D</strong>iscover — broadcast: "Há DHCP aqui?"<br>2. <strong>O</strong>ffer — proposta: IP, mask, GW, DNS, lease<br>3. <strong>R</strong>equest — cliente aceita a oferta<br>4. <strong>A</strong>ck — servidor confirma e registra</div>
+<div class="box box-rose"><div class="box-icon">🚨</div><div class="box-txt"><strong>Rogue DHCP:</strong> Atacante responde mais rápido distribuindo gateway próprio → MITM automático. Mitigação: <strong>DHCP Snooping</strong> — bloqueia offers em portas untrusted.</div></div>
+<h2 class="ch-h2">SNMP — Versões</h2>
+<table class="ch-tbl"><thead><tr><th>Versão</th><th>Auth</th><th>Cripto</th><th>Status</th></tr></thead><tbody>
+<tr><td>v1</td><td>Community string</td><td>Nenhuma</td><td>⛔ Obsoleto</td></tr>
+<tr><td>v2c</td><td>Community string</td><td>Nenhuma</td><td>⚠️ Inseguro</td></tr>
+<tr><td>v3</td><td>USM (user+senha)</td><td>AES-128/256</td><td>✅ Use este</td></tr></tbody></table>
+<div class="lab"><div class="lab-hd"><span class="lab-badge">⚗ Lab 3.1</span><span class="lab-title">Diagnóstico de Protocolos</span></div>
+<div class="lab-desc">Simule consultas DNS, DHCP e análise de protocolos.</div>
+${mkTerm('t-proto',[
+  {c:'t-out',t:'# Lab 3.1 — Protocolos de Rede'},
+  {c:'t-cm', t:'# Comandos: help, dig-a, dig-txt, nslookup, dhcp-info, snmp-walk, smtp-test'},
+],{
+help:()=>`<span class="t-hl">Comandos:</span>
+<span class="t-ok">dig-a</span>      → consulta DNS tipo A
+<span class="t-ok">dig-txt</span>    → consulta TXT (SPF/DKIM)
+<span class="t-ok">nslookup</span>   → resolução reversa suspeita
+<span class="t-ok">dhcp-info</span>  → tabela de leases DHCP
+<span class="t-ok">snmp-walk</span>  → SNMP v2c enumeration
+<span class="t-ok">smtp-test</span>  → cabeçalhos e-mail suspeito`,
+'dig-a':()=>`<span class="t-cmd">$ dig alvo.com A +short</span>
+<span class="t-ok">142.250.80.46</span>
+<span class="t-cm">;; Query time: 8 msec SERVER: 8.8.8.8</span>`,
+'dig-txt':()=>`<span class="t-cmd">$ dig alvo.com TXT</span>
+<span class="t-ok">alvo.com. TXT "v=spf1 include:_spf.google.com ~all"</span>
+<span class="t-ok">alvo.com. TXT "v=DMARC1; p=quarantine; rua=mailto:dmarc@alvo.com"</span>
+<span class="t-cm"># SPF e DMARC configurados — bom anti-phishing</span>`,
+nslookup:()=>`<span class="t-cmd">$ nslookup 185.220.101.5</span>
+<span class="t-err">5.101.220.185.in-addr.arpa → tor-exit-node.anonymous.net</span>
+<span class="t-err">⚠ IP pertence a Tor exit node — alta suspeita!</span>`,
+'dhcp-info':()=>`<span class="t-hl">DHCP Lease Table:</span>
+<span class="t-ok">192.168.1.10</span>  aa:bb:cc:11:22:33  Windows-Laptop  exp:4h
+<span class="t-ok">192.168.1.20</span>  aa:bb:cc:44:55:66  Ubuntu-Server   exp:24h
+<span class="t-err">192.168.1.50</span>  de:ad:be:ef:00:01  &lt;unknown&gt;       exp:1m <span class="t-cm">← Rogue?</span>
+<span class="t-err">⚠ Lease de 1min + MAC desconhecido = possível Rogue DHCP!</span>`,
+'snmp-walk':()=>`<span class="t-cmd">$ snmpwalk -v2c -c <span class="t-err">public</span> 192.168.1.1</span>
+<span class="t-err">⚠ Community string "public" aceita! Exposto.</span>
+<span class="t-out">sysDescr: "Cisco IOS 15.7"</span>
+<span class="t-out">sysUpTime: 47 days | ifTable: eth0 eth1 vlan10 vlan20</span>
+<span class="t-err">→ Migrar para SNMPv3 com auth+priv imediatamente!</span>`,
+'smtp-test':()=>`<span class="t-hl">Headers e-mail suspeito:</span>
+<span class="t-err">From: ceo@empresa.com</span>  <span class="t-cm">← spoofado!</span>
+<span class="t-err">Received-SPF: FAIL</span> (evil.ru não autorizado)
+<span class="t-err">DKIM: NONE</span>
+<span class="t-out">X-Originating-IP: 91.243.44.12</span>
+<span class="t-err">→ Phishing confirmado: SPF FAIL + sem DKIM = bloquear</span>`,
+})}</div>`));
+
+  c.appendChild(mkPage('Cap.3 · Quiz','9',mkQuiz(2,[
+    {_0:'Após o DHCP Offer, qual é o próximo passo do processo DORA?',_1:['Discover','Acknowledge','Request','Release'],_2:'=YlG',_3:'KtwBNIQyneQAUcRAERTLEFACBERFFQUBOEwFBAARBERFEtAAKUQCW0gAKswBEBxFBERFBYDRF0gEKEARBAhCB0ACHQ0CEhkFBIgArQUBEZRAGEwBBYBRXc9pUUCRKFwAAEACTsgCPcQJEZv4GSEEXEQEVEgNEZv4GSkFBIgArQk9ibIRWEgELcwFNACReViNrAiG'},
+    {_0:'Por que Telnet é proibido em ambientes seguros?',_1:['Tem latência operacional alta','Expõe credenciais em texto claro','Não aceita senha interativa','Usa porta dinâmica padrão'],_2:'=4WI',_3:'yxWZl1GfvMjM9w3LzwXO48SO4wXP14y7fiSP7UjL+MDf9gSKoUDKv4TKvwXP8V/n8RxDPwncoQSOoITN9ADL8FTO8FTP7kjO94CK89SPo8yMs8SOuwXO89yM4ITPxMzP8B3L10TN/ITO4kjLfwnc9ETK7ATP81TN60jL7MDKsUjL/wXNp8yLzwCfz8/nywHK5IDM5gQI'},
+    {_0:'Qual versão SNMP deve ser usada em ambientes seguros?',_1:['v1 com community string longa','v2c com VLAN isolada','v3 com autenticação e criptografia AES','Qualquer versão com firewall'],_2:'=QGK',_3:'=oXMwEjJ0VjO0ZSMyITP6cCdmETIlgTNhUCdmsDJ0dSPxIS9XaSIgQSN3QHIsEDI60TN4QCd5EDdnMjO9YCInQXLg0jOhkTO7cDd5UzJhQ3NmJCdxQXZiQne9dQEVwHd10jM1YyM7ACJ9YyN0FDd9lxBBwHd4UTMmQ3O3f58XWzN9AiOxASI1QXO7cDd7c/lnYSMiQXN30jOufJd1QX/XS3ZiQQGacAK'},
+    {_0:'DNS Tunneling é detectado principalmente por:',_1:['POSTs HTTP repetitivos','Subdomínios longos e frequentes','Certificados TLS fracos','ICMP com payload elevado'],_2:'=A2L',_3:'6dSMwoTNmMDd7ASPhkDdAwAA0dSNgcyOkcSMmQHe7cTP64+l0tTP6k/l5sDM0VjJ1QCd10zN64/lhUSMmIDd1ACO1QHenEjJxAyN1YSN3Q3fkFGd5szN0dSM9YSMhUCdudSP1oTPHQnensTP6k/l5sDM2EyJ0lTM0dyOwUDM0VzN9ITPwszN0NjO9gTM6oTIAQ3BaAxL'},
+    {_0:'DHCP Snooping é uma feature de switch que:',_1:['Mede uso do serviço DHCP','Bloqueia DHCP server indevido','Criptografa ofertas DHCP','Reserva IP por endereço MAC'],_2:'=knN',_3:'=IWK4ISKh0yLlgTLhMCO50Cb+kiO+kyHsxxDEgAbpkzKj4BbpISJ6kiP8wG2M7Kb/0CKtgjPt8yPpgCbj8+j/wGKpgzP54DOikDb/0CO+MCPslCKs9TLoISJ6w2Jv0wY+kiKqMAbc8ABIw2PikyKt8jIpEAbiV2PpgjIpUCIvQGbokCO/kjP4ISOslzIsV2PnISJgwTOkxGKpgzP54DOsNSIj8Cb/0CO+MCPs1yL+0SIstiIlwzIjIyHsxxDEggN'},
+  ])));
+}
+
+/* ══ CHAPTER 3: SWITCHING ══ */
+function ch3(c){
+  c.appendChild(mkPage('Cap.4 · Switching e VLANs','10',`
+<div class="dom-badge dom-2">Domínio 2 · Implementação · 20%</div>
+<div class="ch-eye">Capítulo 4</div><h1 class="ch-h1">Switching e VLANs</h1>
+<div class="ch-sub">MAC tables, 802.1Q trunking, STP, LACP e roteamento inter-VLAN</div><div class="ch-div"></div>
+<p class="ch-p">Switches operam na Camada 2. Entender o encaminhamento de quadros é fundamental para detectar MAC flooding, VLAN hopping e erros de segmentação.</p>
+<h2 class="ch-h2">Como Switches Encaminham Quadros</h2>
+<div class="diagram">Frame chega na porta 1 (src: aa:bb:cc:11:22:33)<br>Switch: <strong>aprende</strong> MAC → porta 1 na CAM table<br>dst: ff:ff:ff:ff:ff:ff (broadcast) → <strong>flood</strong> para todas as portas<br>dst: aa:bb:cc:44:55:66 (conhecido) → <strong>unicast</strong> apenas porta 3<br><span style="font-size:11px;color:#8a6848">MAC desconhecido = flood | MAC conhecido = unicast direto</span></div>
+<div class="atk"><div class="atk-hd"><span class="atk-badge">⚠ Ataque</span><span class="atk-title">MAC Flooding — Transformando Switch em Hub</span></div>
+<p class="ch-p" style="margin:0">Atacante envia milhares de frames com MACs falsos → CAM table transborda → switch faz flood de tudo → sniffing total. Mitigação: <strong>Port Security</strong> (limitar MACs por porta).</p></div>
+<h2 class="ch-h2">VLANs — 802.1Q</h2>
+<table class="ch-tbl"><thead><tr><th>Conceito</th><th>Descrição</th><th>Segurança</th></tr></thead><tbody>
+<tr><td>Access port</td><td>Conectada a host — sem tag</td><td>Associe à VLAN correta</td></tr>
+<tr><td>Trunk port</td><td>Switch-switch — múltiplas VLANs com tag</td><td>Só entre switches confiáveis</td></tr>
+<tr><td>Native VLAN</td><td>VLAN padrão sem tag em trunk</td><td>Mude de VLAN 1 — vetor de hopping!</td></tr>
+<tr><td>VLAN 1</td><td>Default de fábrica</td><td>⛔ Nunca usar em produção</td></tr></tbody></table>
+<div class="atk"><div class="atk-hd"><span class="atk-badge">⚠ Ataque</span><span class="atk-title">VLAN Hopping — Double Tagging</span></div>
+<p class="ch-p" style="margin:0">Atacante envia frame com duas tags 802.1Q. Primeiro switch remove tag externa (native VLAN); segundo switch entrega na VLAN alvo. Mitigação: alterar Native VLAN para VLAN não utilizada (ex: 999) e desabilitar DTP.</p></div>
+<h2 class="ch-h2">STP — Spanning Tree Protocol</h2>
+<table class="ch-tbl"><thead><tr><th>Versão</th><th>Convergência</th><th>Status</th></tr></thead><tbody>
+<tr><td>STP (802.1D)</td><td>30–50 segundos</td><td>Obsoleto — muito lento</td></tr>
+<tr><td>RSTP (802.1w)</td><td>1–2 segundos</td><td>✅ Recomendado</td></tr>
+<tr><td>MSTP (802.1s)</td><td>1–2 segundos</td><td>✅ Múltiplas instâncias por VLAN</td></tr></tbody></table>
+<div class="box box-rose"><div class="box-icon">🛡</div><div class="box-txt"><strong>PortFast + BPDU Guard:</strong> PortFast coloca porta em forwarding imediato (clientes). BPDU Guard desabilita se receber BPDU — previne STP manipulation por dispositivo não autorizado.</div></div>`));
+
+  c.appendChild(mkPage('Cap.4 · Inter-VLAN, LAG · Quiz','11',`
+<h2 class="ch-h2">Roteamento Inter-VLAN</h2>
+<table class="ch-tbl"><thead><tr><th>Método</th><th>Como</th><th>Prós/Contras</th></tr></thead><tbody>
+<tr><td>Router on a Stick</td><td>Link trunk + sub-interfaces por VLAN</td><td>Simples / bottleneck no link</td></tr>
+<tr><td>Layer 3 Switch (SVI)</td><td>SVIs por VLAN no switch</td><td>Rápido / mais caro</td></tr></tbody></table>
+<h2 class="ch-h2">LAG — Link Aggregation (LACP 802.3ad)</h2>
+<p class="ch-p">Agrupa múltiplos links físicos em um lógico: mais bandwidth + redundância automática.</p>
+<div class="diagram">Switch A: port1 ─┐<br>Switch A: port2 ─┤ LAG → <strong>2 Gbps + failover automático</strong><br>Switch A: port3 ─┘<br><span style="font-size:11px;color:#8a6848">3×1Gbps → 1 lógico de até 3Gbps com redundância</span></div>
+${mkQuiz(3,[
+  {_0:'O que acontece quando a CAM table de um switch transborda por MAC flooding?',_1:['Interrompe todo encaminhamento','Reinicia a tabela por software','Passa a inundar frames desconhecidos','Ativa STP em modo proteção'],_2:'=s2J',_3:'==Ad/4zPoo3O6tjP14ie/4je10zP8sfmo4ie1o3P8wzM0kie/4CN7kzOusje1o3Pvsie14DNz4yM3gyPqonzajrepsjLoUjK6lyO6lyO+UjL6tDK7oieukyO5MDNvoXK/czOowjepUjepUjP14ie/4je+UTN2wjeo8DI7wje7o3OpkyOqo3P6lSGbchepUDL1Qjeo8jP08DKqsje/8SP/kCN1kje1kfm0onM54yMtkie1ond74DK1gTK0sDKuo3P2gzOuo3Fbkhe7oXN+QzOvswJ'},
+  {_0:'Qual a função de uma Trunk Port?',_1:['Conectar host em access','Carregar VLANs com tag 802.1Q','Filtrar VLANs proibidas','Agrupar links físicos'],_2:'=EmL',_3:'=4nI/QTM1QyPi0HOzQSOnMCc1AHOzQSOnMSf4MDJ5cyIwNyO+kDPw1TNwNSM0EzIFAnf5VTPxIiNw9TMwNyP0EjP/kzM5QTMwNSNkkiMwRGewFQY+JGYoB3I3EDJw9DN+EzIlA3IeEBHGA3IxwDI5QCPqPZPwVDNwNyPiQTMlECc9EDJi8DIj4TMiQCcjQiI/ACc74TJiQgL'},
+  {_0:'Por que VLAN 1 não deve ser a Native VLAN?',_1:['Não roteia entre segmentos','É padrão e facilita abuso','Não participa de STP','Vem bloqueada por padrão'],_2:'=oXN',_3:'==AZzN3cqVyJlkiar4yKwMiJj4zPqVS6JSiaEsgBco2K4siOq9iL/cgakNWLkMSLtsiPq9iJo8TJuImatQyI6oTJioGBLYAHqtiam8CPrnIOvQiJ/wjaerMqq1yK+o2Lo8SKvgjalkeikoGBLYAHq9CPj4zKEo2KkoWJt8CLrnIOeoGZ58iIp4zI9kja5UiPj8zJqdyLqVS6JijLrojaEsgBco2L8MiPrQgaro24Jq2eqRwCGwRN'},
+  {_0:'STP (802.1D) é problemático porque:',_1:['Ignora VLANs atuais','Converge lentamente em falhas','Limita links a 100 Mbps','Desativa agregação LACP'],_2:'=MHP',_3:'==garASJgoSIpsyJhYDZrc+h2ASJ0Q2Kk1+hkFCZ3sCIqEzIhcDZ2lWdklSIkFyI2EiMqsyJk12M1pmd0xHbkRBEXYBZq9iKtgCZhACZlwCKlICZ3c/h0UCZ20yI2EiMqsyJkViNlQDZ3sCIqEzIhcDZ0FXa0dHZlITIoQWbAUna2RHfsRGKloSLj0iNrQGFQcBP'},
+  {_0:'LACP (802.3ad) é usado para:',_1:['Autenticar switch na VLAN','Agregar links com redundância','Impedir flood de MAC table','Definir native VLAN dinâmica'],_2:'=wwQ',_3:'UsVWT50m5fVVO90Was1UZRFm57FVP51XIpBSbRVVTl1UetlGfphUO51UN5FVbhlGItlTU91VPtlGbh0WKpRSRR1UWpRVeR1WUNFWXVVWaYRSVx0UONVSVpUST5lGJNVVepxXI5EVfpxEK9UVI1nGUV1UOtVXfhUXdtnGRR1U2JhG9tndac1Ta8lXaUVm53Z+bdFSVxlGbpxWTlVVd9FVaoWe7Z3Q'},
+])}
+`));
+}
+
+/* ══ CHAPTER 4: ROUTING ══ */
+function ch4(c){
+  c.appendChild(mkPage('Cap.5 · Roteamento','12',`
+<div class="dom-badge dom-2">Domínio 2 · Implementação</div>
+<div class="ch-eye">Capítulo 5</div><h1 class="ch-h1">Roteamento</h1>
+<div class="ch-sub">Roteamento estático, OSPF, BGP conceitual e longest prefix match</div><div class="ch-div"></div>
+<h2 class="ch-h2">Longest Prefix Match</h2>
+<div class="diagram">Destino: 10.20.30.40 — Tabela de rotas:<br>10.20.30.0/24 → via 192.168.1.1  <strong style="color:#3a8a5a">← MAIS ESPECÍFICA — vence!</strong><br>10.0.0.0/8    → via 192.168.2.1  (menos específica)<br>0.0.0.0/0     → via 192.168.0.1  (rota padrão — fallback)<br><span style="font-size:11px;color:#8a6848">Longest prefix match: /24 vence sobre /8 e /0</span></div>
+<h2 class="ch-h2">Tipos de Rota e Administrative Distance</h2>
+<table class="ch-tbl"><thead><tr><th>Tipo</th><th>Como</th><th>AD</th><th>Uso</th></tr></thead><tbody>
+<tr><td>Conectada</td><td>Interface própria</td><td>0</td><td>Automática</td></tr>
+<tr><td>Estática</td><td>Configurada manual</td><td>1</td><td>Redes pequenas, rotas específicas</td></tr>
+<tr><td>OSPF</td><td>Link-state dinâmico</td><td>110</td><td>Redes corporativas internas</td></tr>
+<tr><td>EIGRP</td><td>Híbrido Cisco</td><td>90</td><td>Ambientes Cisco legados</td></tr>
+<tr><td>eBGP</td><td>Path-vector entre ASes</td><td>20</td><td>Roteamento internet (ISPs)</td></tr>
+<tr><td>Padrão (0.0.0.0/0)</td><td>Fallback</td><td>—</td><td>Gateway de último recurso</td></tr></tbody></table>
+<h2 class="ch-h2">OSPF — Open Shortest Path First</h2>
+<p class="ch-p">OSPF usa o algoritmo <strong>Dijkstra</strong> para calcular o menor caminho. Routers trocam LSAs e constroem o mapa completo da topologia.</p>
+<ul class="ch-ul">
+<li><strong>Area 0 (backbone):</strong> obrigatória — todas as outras areas conectam a ela</li>
+<li><strong>Hello packets:</strong> descoberta e manutenção de vizinhos (IP proto 89)</li>
+<li><strong>DR/BDR:</strong> Designated Router eleito em redes multi-acesso</li>
+<li><strong>Convergência:</strong> segundos — muito mais rápido que RIP</li>
+</ul>
+<div class="atk"><div class="atk-hd"><span class="atk-badge">⚠ Ataque</span><span class="atk-title">BGP Hijacking — Sequestro de Rotas</span></div>
+<p class="ch-p" style="margin:0">AS malicioso anuncia prefixos de outro AS com rotas mais específicas → tráfego desviado globalmente. Mitigação: <strong>RPKI</strong> (Route Origin Validation), BGP communities, monitoramento de prefixos.</p></div>`));
+
+  c.appendChild(mkPage('Cap.5 · Quiz','13',mkQuiz(4,[
+    {_0:'O que é Administrative Distance (AD)?',_1:['Distância física do enlace','Preferência da origem da rota','Quantidade de saltos L3','Capacidade nominal do link'],_2:'=sHN',_3:'==gZnATIu0iO4g2JlsTLlg2JoVSKhsiJ9YSKotTL8YyJug2OpQCOhwDJyvYJodCLmkSP5g2JsEiOt4SL6gDatoDOl0yOoF+ioxQCopzJm0SBoZWYnYiOtwDMtgGe6BGaY8gCtgmdoFGe5lHYo5AGbcAa2hWY4BGa7kCLpwzKtYyJrg2OpwzJagmZtwjJn4CapwCatwSKsECJhoSKh4iJnsCapg2JsYSKrECLmECa91nelhHa6cCJp4Dal0DahvIaMkAN'},
+    {_0:'Longest Prefix Match significa:',_1:['Usar rota com menos saltos','Usar o prefixo mais específico','Balancear rotas equivalentes','Escolher a menor latência'],_2:'=Q3O',_3:'==ga0tGdqRna0pGdkFiNmsyNkFyJqEiMkFSM1QGa8tGdqRna0pGd1RWI2YyK3QWInoSIyQGc2tGdqVna1pGd1RWJwsiNk5XcqVna1pGd1R2Kq0CM3ECAkpWJn0iIpf4JhQzNhQ2NtUSKkVCZhwCKrcyNhQmNrASJhAzK2Q2KkhWKloSLmkyKnQ2NlAzK2Q2NlgCNtADK+fYKktCIqUSM1QmfscCMlkAZ80iIhYDFkBzNhMiKrgwO'},
+    {_0:'Em OSPF, qual a função da Area 0?',_1:['Área opcional isolada','Backbone do domínio OSPF','Área só para rotas externas','Segmento de gerência SNMP'],_2:'=0gQ',_3:'SclUVBFHQ1VSI5UVKxRXVpEHJNFHZhkUZFVXIllTVhFHMwRXZ5Ufcw5/c0FWdh0XZJ1UfxhTdh0TZxRWKlFWcklUT51Vf1lXRM1n/LFHdllTd+PHdh1UoxhETVlTP+PSdtVVO51UcoHbvNHHZJ1Ued1Xd5FHTxRl/zBDc0VWO1nQ'},
+    {_0:'Uma rota padrão (0.0.0.0/0) é usada quando:',_1:['Há excesso de rotas locais','Não há rota mais específica','O link WAN saturou','OSPF foi desativado'],_2:'=YQS',_3:'eA2Y5BxXUBBQfhFEf1VWIN48CBEEfBRUCFFQQUFReVVXcFlQVdFEkCr0Q8lXZR0QVRFEfBRXfNFER5VWS11XTBRUTllVdO/UVB0QVBxQZFVXQEFRfJEER1VRY5VVeBxXU5VUFFEEfdVVWF58CREERhlXZ1VUT5VVQkBRC91QVJEEENUUcBhVfBRSRdUVEF1VQ8BEVRURfJEEExVRRZVVUhBEfN58CRVUABRUE9lQQEXS'},
+    {_0:'BGP Hijacking ocorre quando:',_1:['Bloqueia resolução DNS','Anuncia prefixo de outro AS','Explora falha no OSPF','Inunda cache ARP'],_2:'=8BU',_3:'GE2Y4pHCSc0ir/46J9UQcFUZIYwRMlUQetVTMhARJp0RE9ECH9UTOl46axFCScETJxFRdtVT6hgBFl0TJh1RahFCNhQRJxVQNtUSIsVTadETJ1EXHpFCEc0irrFTJhFCadEWIUUTPFkWHhQSMFERJ5FCHt46GhAevpGCHV0RrhgB7lGCHpFXddECJhQRNtkRNxlWNhFCN1VWIs1RQFkTNpFWIkUQLZUXGlEC7lGCS8kRBN0SJJUQghAevpGU'},
+  ])));
+}
+/* ══ CHAPTER 5: CABLING ══ */
+function ch5(c){
+  c.appendChild(mkPage('Cap.6 · Cabeamento e Conectores','14',`
+<div class="dom-badge dom-2">Domínio 2 · Implementação</div>
+<div class="ch-eye">Capítulo 6</div><h1 class="ch-h1">Cabeamento e Conectores</h1>
+<div class="ch-sub">Cat5e/6/6A, fibra single/multi-mode, PoE, RJ-45, SFP</div><div class="ch-div"></div>
+<h2 class="ch-h2">Categorias de Cabo UTP — Clique para detalhes</h2>
+<div class="cable-row" id="cable-row">${[
+  {cat:'Cat5e',spd:'1 Gbps / 100m',note:'Mínimo atual',det:'Cat5e: 4 pares, 100 MHz. 1 Gbps até 100m. Comum em legado. Suficiente para VoIP e 1G Ethernet.'},
+  {cat:'Cat6',spd:'10G / 55m · 1G / 100m',note:'Padrão corporativo',det:'Cat6: separador interno reduz crosstalk. 250 MHz. 10 Gbps até 55m. Padrão para novas instalações.'},
+  {cat:'Cat6A',spd:'10 Gbps / 100m',note:'Data centers',det:'Cat6A (Augmented): 500 MHz. 10 Gbps nos 100m completos. Obrigatório para 10GBase-T. Suporta PoE++.'},
+  {cat:'Cat7',spd:'10 Gbps / 100m',note:'STP por par',det:'Cat7: cada par blindado individualmente (S/FTP). 600 MHz. Conector GG45 — não RJ-45 padrão.'},
+  {cat:'Cat8',spd:'40 Gbps / 30m',note:'TOR switches',det:'Cat8: 2000 MHz. 25/40 Gbps a 30m. Exclusivo para conexão top-of-rack em data centers.'},
+].map(ca=>`<div class="cable-c" onclick="showCable('${ca.cat}','${ca.det}')"><div class="cable-cat">${ca.cat}</div><div class="cable-spd">${ca.spd}</div><div class="cable-note">${ca.note}</div></div>`).join('')}</div>
+<div id="cable-detail"></div>
+<h2 class="ch-h2">Fibra Óptica</h2>
+<table class="ch-tbl"><thead><tr><th>Tipo</th><th>Núcleo</th><th>Distância</th><th>Uso</th><th>Custo</th></tr></thead><tbody>
+<tr><td><strong>Single-mode (SMF)</strong></td><td>9µm</td><td>até 100km</td><td>WAN, backbone longo</td><td>Alto</td></tr>
+<tr><td><strong>Multi-mode (MMF)</strong></td><td>50/62.5µm</td><td>até 2km</td><td>Data center, campus</td><td>Médio</td></tr></tbody></table>
+<h2 class="ch-h2">PoE — Power over Ethernet</h2>
+<table class="ch-tbl"><thead><tr><th>Padrão</th><th>Potência</th><th>Uso</th></tr></thead><tbody>
+<tr><td>802.3af (PoE)</td><td>15.4W</td><td>VoIP phones, câmeras básicas</td></tr>
+<tr><td>802.3at (PoE+)</td><td>30W</td><td>APs Wi-Fi, câmeras PTZ</td></tr>
+<tr><td>802.3bt (PoE++)</td><td>60/100W</td><td>Laptops, TVs, APs Wi-Fi 6E</td></tr></tbody></table>
+<div class="box box-gold"><div class="box-icon">🔧</div><div class="box-txt"><strong>Conectores:</strong> RJ-45 (UTP), LC/SC/ST (fibra), SFP/SFP+/QSFP (transceivers modulares). SFP+=10G; QSFP=40/100G. F-type para coaxial.</div></div>`));
+  c.appendChild(mkPage('Cap.6 · Quiz','15',mkQuiz(5,[
+    {_0:'Qual categoria suporta 10 Gbps na distância completa de 100 metros?',_1:['Cat5e','Cat6','Cat6A','Cat7'],_2:'=0QQ',_3:'=QRSKhVfasgGTmvGVd1UCtZ+XpxXP40W5pBFX9wDEpxk570Wak0WU9lSbpRfKsgGb5ESVp0TJpBDOtVeaQxVKowCaMZ+OtlGudxXJtFe9pwCaslTIVlSPlkGfpBQydnGKowDaslGbh0XKVlGT41XOR1XX11T7JhG7xgTblXQ'},
+    {_0:'Diferença principal entre fibra SMF e MMF:',_1:['SMF é mais barata','SMF usa núcleo menor e vai longe','MMF alcança distâncias maiores','SMF usa múltiplos modos'],_2:'=cAS',_3:'==gHDFVWT5lkzT0QZRFEDF1Ve9FXQElQRBEEcVlRRO/QeVFQDlFVelFEDFVXQ8lQRNFEDlVUdBRmzDhd9NGEe01WCARmzTUUQwBf1N2cm9Bd1xHEc0VhyXgHCYwHAUAEfVFXTp48eBhCZYXf9hBEVR1Xd1RWExVR9BhHdtFAAEAEZOPRRBBHCV1QRxFEc0VhynAEfVFXTp48eBhCZYXfjhBEVR1Xd1RVcdlXZNGS'},
+    {_0:'PoE 802.3at (PoE+) fornece:',_1:['15.4W','30W','60W','100W'],_2:'=AwT',_3:'==AGhZgBHkRYGAgFXZxVRNlXVZhQUVAGEYgDW0QYCgxAHsAUXVAGEYgDWgBbiZmFFdFRTtFl1XlFTZxXwtxXhZRRmdnFFllUWc1XEl1XXtlFXR0VGZxUCh1UfV1XQNUZWgxVCRUWGZBRZZkFhZQBWsgFdMXWmZxCWI0VFgBBG4wT'},
+    {_0:'CRC errors em interface de switch geralmente indicam:',_1:['Problema lógico de VLAN','Cabo ou crimpagem ruim','Servidor DHCP esgotado','Ataque de MAC flooding'],_2:'=khV',_3:'==gBal0SBx1WHZ0TJFETIkkWJhFCPZUQEpUSLhQTMhgWHxUSLFkTBxlWNtECNtVfIYQYl1GCJF0SGJ46a1kTa1EXGFECEsVQJVUTMhwRPZ0REhwRKl0SIQwRC11WIo1RctUTGd0SIQQRB1lWI8kRBhVRBp1SIQwRMl0SB5UQGlETIckSJtECSc0SBtVhr7ECJVUTEp0RahFC8iqyIs1RMFEWFdkWad0SIcETGl0TNB0SIsVTFlkWOhQRJtUQMZUQIslWHplWNhwa6tmV'},
+    {_0:'Transceiver modular padrão para 10 Gbps em switches:',_1:['RJ-45','SFP+ (Small Form-factor Pluggable Plus)','LC Duplex direto','F-type coaxial'],_2:'=IRX',_3:'==ADlJhET0QZSYhADB1QSJQCyRWcz1gckF3cCwgSBZ1SVFlANJAUDZ0VPJwTHFlAQdkUS1UQCE2YmJwVNJAZv9mAOQ2bxJwRQZFTHJAUDFUTQZlAYckRDZ0SOtEQLp1RORkAHZ1SPB1RyJADRJFQlJgETIwQQNkUC0UghDlRDJlAQNkTXZUTPJAUHR1SHFUUMNEUWJQTCsY4CkgckFXX'},
+  ])));
+}
+
+/* ══ CHAPTER 6: WIRELESS ══ */
+function ch6(c){
+  c.appendChild(mkPage('Cap.7 · Wireless (WLAN)','16',`
+<div class="dom-badge dom-2">Domínio 2 · Implementação</div>
+<div class="ch-eye">Capítulo 7</div><h1 class="ch-h1">Wireless — WLAN</h1>
+<div class="ch-sub">Bandas, canais, padrões 802.11, WPA3 e site survey</div><div class="ch-div"></div>
+<h2 class="ch-h2">Bandas de Frequência — Clique para comparar</h2>
+<div class="band-viz">${[
+  {f:'2.4 GHz',lbl:'Banda 2.4',desc:'Maior alcance, mais ruído',det:'Canais não sobrepostos: 1, 6, 11. Padrões: 802.11b/g/n. Interferência: micro-ondas, Bluetooth. Alcance: ~70m indoor.'},
+  {f:'5 GHz',lbl:'Banda 5',desc:'Mais rápida, menos congestionada',det:'Muitos canais sem sobreposição. 802.11a/n/ac/ax. DFS evita interferência com radar. Alcance: ~35m indoor.'},
+  {f:'6 GHz',lbl:'Banda 6 (Wi-Fi 6E)',desc:'Mais limpa e rápida',det:'Exclusivo Wi-Fi 6E (802.11ax). Canal até 160 MHz. Praticamente sem interferência. Ideal para alta densidade.'},
+].map(b=>`<div class="band-card" onclick="showBand('${b.f}','${b.det}')"><div class="band-freq">${b.f}</div><div class="band-label">${b.lbl}</div><div class="band-desc">${b.desc}</div></div>`).join('')}</div>
+<div id="band-detail"></div>
+<h2 class="ch-h2">Padrões 802.11</h2>
+<table class="ch-tbl"><thead><tr><th>Padrão</th><th>Nome</th><th>Banda</th><th>Velocidade máx</th></tr></thead><tbody>
+<tr><td>802.11b</td><td>—</td><td>2.4 GHz</td><td>11 Mbps — obsoleto</td></tr>
+<tr><td>802.11g</td><td>—</td><td>2.4 GHz</td><td>54 Mbps — obsoleto</td></tr>
+<tr><td>802.11n</td><td>Wi-Fi 4</td><td>2.4/5 GHz</td><td>600 Mbps (MIMO)</td></tr>
+<tr><td>802.11ac</td><td>Wi-Fi 5</td><td>5 GHz</td><td>3.5 Gbps (MU-MIMO)</td></tr>
+<tr><td>802.11ax</td><td>Wi-Fi 6/6E</td><td>2.4/5/6 GHz</td><td>9.6 Gbps (OFDMA)</td></tr>
+<tr><td>802.11be</td><td>Wi-Fi 7</td><td>2.4/5/6 GHz</td><td>46 Gbps (MLO)</td></tr></tbody></table>
+<h2 class="ch-h2">Segurança Wireless</h2>
+<table class="ch-tbl"><thead><tr><th>Protocolo</th><th>Criptografia</th><th>Auth</th><th>Status</th></tr></thead><tbody>
+<tr><td>WEP</td><td>RC4 (quebrado)</td><td>PSK</td><td>⛔ Quebrado em minutos</td></tr>
+<tr><td>WPA</td><td>TKIP (fraco)</td><td>PSK/Enterprise</td><td>⛔ Vulnerável</td></tr>
+<tr><td>WPA2-Personal</td><td>AES-CCMP</td><td>PSK</td><td>⚠️ PMK capturável + dicionário</td></tr>
+<tr><td>WPA2-Enterprise</td><td>AES-CCMP</td><td>802.1X+RADIUS</td><td>✅ Bom para empresas</td></tr>
+<tr><td>WPA3-Personal</td><td>AES-GCMP-256</td><td>SAE (Dragonfly)</td><td>✅ Sem PMK offline</td></tr>
+<tr><td>WPA3-Enterprise</td><td>AES-GCMP-256</td><td>802.1X+PMF</td><td>✅ Melhor disponível</td></tr></tbody></table>`));
+  c.appendChild(mkPage('Cap.7 · Quiz','17',mkQuiz(6,[
+    {_0:'Canais 2.4 GHz que não se sobrepõem no Brasil:',_1:['1, 5, 9, 13','1, 6, 11','2, 7, 12','1, 4, 8, 11'],_2:'=EgT',_3:'==gGYVlWVdVGbdFFV11Va559GFlUGFFQa1FFGVlTdlVXa1VWUUlRVREFH1VVaV1VUcUUAdUUaRxRkVHFRZUQT1lUat1dUoRVAFFWEl1WXRxWXe/k331RbRUUGZ1WHRhRVBUXCFFFVZUVERRUApVUddVXSF0RUs1l3P59VZUVEF1RUkln3DEFFUAFRRhAUgRBUcUXVpVVXRxRbRxRVpVUEVFFY4EfzRBAaYAFVxUXVJFFVpnT'},
+    {_0:'WPA3-Personal é mais seguro que WPA2-Personal contra força bruta porque:',_1:['Usa chave de 256 vs 128 bits','SAE impede captura de handshake para ataque offline','Exige certificado digital','Não usa senha — apenas biometria'],_2:'=oRV',_3:'=IwXFlkWN+eRaJURMkkQFBkSKNEDflUWd1EWNxwQIJUTC51QYxAA81GDDxQQD9EDD947L+eTelEWCVEDelUWdlkXM0kWFhVTYJUSYxQTI10TMgLrOzQBVBkSCN0SN5FaMMADfBUTZ1VaMo0QMI0QFhVTPVEWClERYlVbM8VWDlkQNhFQZFUR/RADp12fM00XZxwHtx3eMIQSCVEQKp0QMMURe147CNURPVESM4rqOzAQJpVjv7VWYxVTPxQSH1ERfhkQNREDV10WBgBDWAUTCN0XelEfB4Rb8tXV'},
+    {_0:'802.11ax é conhecido como:',_1:['Wi-Fi 5','Wi-Fi 6','Wi-Fi 4','Wi-Fi 7'],_2:'=MBX',_3:'=oAcL1GBFZVRURQQJ1EcEE0TFNHBQF0QWVEcEEEBDpUTWtESLdGB3dnZEgAHcxBBrlWbplQcpRACllGYitGBeFFQLZFUK1GBK0gXsNGBSQQRApURGRQRKRQYSQQTilQTzRQQMQgEE0kYJ00cEkBBcVUFVogFUwBX'},
+    {_0:'Evil Twin Attack em Wi-Fi consiste em:',_1:['Jamming no canal usado','AP falso atraindo clientes','Exploração de WPS PIN','Flood de associação Wi-Fi'],_2:'=wyY',_3:'y8USVhVXOxzc413f1pXdo5We/xTe4xzc/+9uf3He1BXfqxTcz9HP59Wduxmb5hmcZFzLdx0S8Yyc/+9uf33e1hWdRxjM5hmc99Xfo1HPzBXesxTfv9Wfsxzc7lne9+tboxzc4NHa8kHPz9Gc9pHPM1FPz1HPx1Ha/lncz9HP59GPvlHaylXdw9FPykHauNne88Wd9FHPw1nc19GP5xDWV90T8MXcvlXc8E3c/xDTdxTf152f8kHay13f9hWf8Yic1tGS8AXdql1Y'},
+    {_0:'WPA2-Enterprise difere de WPA2-Personal porque:',_1:['Criptografia simétrica maior','Autenticação 802.1X/RADIUS','Mais clientes simultâneos','Velocidade nominal maior'],_2:'=Uia',_3:'=ozZ7B3egRzewpXcgFXe7ZGZ5t3d0U3d9pnrXTTd8pXcnRTcwRze3dWfmRTd61Xe9hXc0AIl2TzewVHf41HYmVHZ5t3d081RERTexdEN60DRVFFR0E2e0sHc1dXfy1HYmF3d8QTcgpXc5hXdhBXfi1Hc61HN1dXfgpXcgFWd0sXfmV71hdWY0UHc1dFN6cUQdBVVGRjZ7BXfiZWcnRTc0QUVRRTe7dHNMViOmQCL0U3ZhRTcn1nZkZWcgpXU5YSVENka'},
+  ])));
+}
+
+/* ══ CHAPTER 7: WAN ══ */
+function ch7(c){
+  c.appendChild(mkPage('Cap.8 · WAN, VPN e Acesso Remoto','18',`
+<div class="dom-badge dom-2">Domínio 2 · Implementação</div>
+<div class="ch-eye">Capítulo 8</div><h1 class="ch-h1">WAN, VPN e Acesso Remoto</h1>
+<div class="ch-sub">SD-WAN, MPLS, tunneling, IPSec e WireGuard</div><div class="ch-div"></div>
+<h2 class="ch-h2">Tecnologias WAN</h2>
+<table class="ch-tbl"><thead><tr><th>Tecnologia</th><th>Característica</th><th>Segurança</th></tr></thead><tbody>
+<tr><td>MPLS</td><td>Label switching, QoS garantido, privado</td><td>Não criptografado! ISP vê tráfego</td></tr>
+<tr><td>Metro Ethernet</td><td>Ethernet sobre fibra, 1–100 Gbps</td><td>Privado, sem cripto nativa</td></tr>
+<tr><td>Leased Line</td><td>Dedicado ponto-a-ponto</td><td>Privado — caro</td></tr>
+<tr><td>Internet/SD-WAN</td><td>Múltiplos links, failover automático</td><td>Requer VPN/criptografia obrigatório</td></tr>
+<tr><td>4G/5G</td><td>Backup wireless</td><td>VPN recomendada</td></tr></tbody></table>
+<h2 class="ch-h2">SD-WAN — Software Defined WAN</h2>
+<ul class="ch-ul">
+<li><strong>Application-aware routing:</strong> VoIP pelo MPLS, backup pelo LTE</li>
+<li><strong>Zero-touch provisioning:</strong> filial se configura automaticamente</li>
+<li><strong>Política centralizada:</strong> segurança uniforme em todas as filiais</li>
+<li><strong>SASE ready:</strong> integra com cloud security (Zscaler, Prisma Access)</li>
+</ul>
+<h2 class="ch-h2">VPN — Tipos</h2>
+<table class="ch-tbl"><thead><tr><th>Tipo</th><th>Protocolo</th><th>Uso</th><th>Segurança</th></tr></thead><tbody>
+<tr><td>Site-to-Site</td><td>IPSec/IKEv2</td><td>Conectar filiais</td><td>⭐⭐⭐⭐⭐</td></tr>
+<tr><td>Remote Access</td><td>OpenVPN, WireGuard</td><td>Home office</td><td>⭐⭐⭐⭐⭐</td></tr>
+<tr><td>SSL VPN</td><td>TLS/HTTPS</td><td>Acesso via browser</td><td>⭐⭐⭐⭐</td></tr>
+<tr><td>PPTP</td><td>GRE+MS-CHAPv2</td><td>Legado — EVITAR!</td><td>⭐ (comprometido)</td></tr></tbody></table>
+<div class="box box-rose"><div class="box-icon">⚡</div><div class="box-txt"><strong>WireGuard vs OpenVPN:</strong> WireGuard tem ~4.000 linhas de código vs ~70.000 do OpenVPN — menor superfície de ataque. Kernel-native desde Linux 5.6. Preferido para novas implementações.</div></div>`));
+  c.appendChild(mkPage('Cap.8 · Quiz','19',mkQuiz(7,[
+    {_0:'Por que MPLS não é considerado seguro por si só?',_1:['MPLS tem latência alta','Privado não significa cifrado','MPLS só roda em internet','MPLS não aplica QoS'],_2:'=QxW',_3:'=wQcuJ3bCcEUA1UUCE0RxJ3aCcETNtUQLZ0QC4QULdEVPGeUMdUUCE1RXGehhP0TQ1ERMtkADB1QyJADR1kRDZkAQNEUXZlUDFkAHZUTSJAUNZ0RU1EUSJQTGJQTWF1RM1UUHZkANtEUDGOTNtUQMdFRCcVTCIXcrJQbCwQTGNERDBVRNZlULBVQCsY4C0UghzkANV0RENY4QZlANJQUD9kAO0kRD5UTRtkANZ0QUtEUSJQTWt0VBB1SBJwRBdETQ1ERCEnby92W'},
+    {_0:'Application-aware routing no SD-WAN garante que:',_1:['VLAN preferencial fixa','Escolha por jitter e perda','OSPF com métrica QoS','Marcação DSCP estática'],_2:'=0iY',_3:'==gN0lXb2lXd4c3ub/7221nbq1Hb2FHO113a4QDd51na4cHa11Hb4UXf4MndxRHOqdHc01Xd4cHd9hGO5BndxVXe7ZXf4cHO9hDSRdnT4k3ex5XcsZXf8FHO/ZXcs12dqhTfql3b5Vjd3FHb5tXc0hGaZhjNzZXc0hTe8l3e40Hf4s2a3RHOs13c7lHa40HO5F3e2J72slHd4Qja9xGbxJHO9xmd9VXetZXcsZ3d7hTeqdHbxZ3d1hjVZ9UNctkY'},
+    {_0:'Por que PPTP não deve ser usado?',_1:['É muito lento','MS-CHAPv2 foi comprometido — senhas recuperáveis offline','Não suporta IPv6','Não funciona por NAT'],_2:'=YSa',_3:'8wlQEx3di1lMn1nM2B2cnV1dgtXRycXYHJDPhNHY9pnM/dnMzpHf3FmMzJDYzB2didWc3BmM/dnd9JmMHJUV9E2d+B3cmJTZ9BHf7NHYy8XfxJTY3d2YzZ2cy4zd5NnehZHfzpnM9NnM9FWY3F3cy8XfRJDP9Z3cgB3dnNmM3ZGf393cxtHdzBWd9ZmY7BWcysb0ysjQGJkQy0Hfy0ndzF2Z6IDIkJ0UaF1PB9Va'},
+    {_0:'ZTNA difere de VPN tradicional porque:',_1:['ZTNA reduz latência','ZTNA limita por aplicação','ZTNA só usa chave simétrica','São modelos equivalentes'],_2:'=8Dc',_3:'ikGeilWYtlnYlhnYj9GLjhHdphnYj9GLpxyY6VGel93Y89XZoxCIphWboVGeilGalxyYoJWbvVmal5Xa6xCItVmft+8f/l2bpJGLj96zr+cbvVGY81GLs+ML/1mYpxXbsM2f/l2btxSaol2biN2bs0kQYZFLiAWa6F6z/93Y8xCYt5Xa41GYsMGeilWYlp3YhxCmM6OLphWa+xSboxiLj5HeilGauwyYl5XrPn3f5xyYs02bjB2YvxCYtJ2Yl9WZo1mf4xiQcpFc'},
+    {_0:'Split tunneling em VPN significa:',_1:['VPN que criptografa só porta 443','Tráfego corporativo pelo túnel; internet pública vai direto sem VPN','VPN em dois túneis paralelos','Criptografia em camadas OSI diferentes'],_2:'=gzd',_3:'kUmfvh3YupSZt9GbrmMe+pSZkpya8NmfrhXZ6hXZppSZpmcrJ/mflhneqc2b5pCMllWejhlKkM3a99mfr1mKlRmKr1GerlmKw9nbvhlKkY2apVmZq43bkh3b+R2YqsmZvpnKl53b4NmbqM2a5pyIkkmfvpiJvh2fe9XZTJiKll2YmhGsJrnKllXevl2aqEDRaxlKm9GZwmsfqUmZvpnKjtGfqsGfj53a4Vme4VWaq8mbvhnKrpya4tmeqUWbvx2qJjnfqATbkNmZvRGZ/5nK+NmZ6l1d'},
+  ])));
+}
+
+/* ══ CHAPTER 8: OPERATIONS ══ */
+function ch8(c){
+  c.appendChild(mkPage('Cap.9 · Operações e Documentação','20',`
+<div class="dom-badge dom-3">Domínio 3 · Operações · 18%</div>
+<div class="ch-eye">Capítulo 9</div><h1 class="ch-h1">Operações e Documentação</h1>
+<div class="ch-sub">IPAM, diagramas, monitoramento, baselining, ferramentas e gestão de mudanças</div><div class="ch-div"></div>
+<h2 class="ch-h2">Documentação Essencial</h2>
+<table class="ch-tbl"><thead><tr><th>Documento</th><th>Conteúdo</th><th>Importância em segurança</th></tr></thead><tbody>
+<tr><td>Diagrama lógico</td><td>Topologia, VLANs, IPs, protocolos</td><td>Entender fluxos e segmentação</td></tr>
+<tr><td>Diagrama físico</td><td>Localização, cabos, racks</td><td>Resposta a incidentes físicos</td></tr>
+<tr><td>IPAM</td><td>Inventário completo de IPs e subnets</td><td>Detectar IPs não autorizados</td></tr>
+<tr><td>Change log</td><td>Mudanças com data, responsável, rollback</td><td>Correlacionar incidentes com mudanças</td></tr>
+<tr><td>Baseline</td><td>Métricas normais documentadas</td><td>Detectar anomalias por comparação</td></tr></tbody></table>
+<div class="lab"><div class="lab-hd"><span class="lab-badge">⚗ Lab 9.1</span><span class="lab-title">Ferramentas de Diagnóstico de Rede</span></div>
+<div class="lab-desc">Pratique as ferramentas essenciais de troubleshooting e monitoramento.</div>
+${mkTerm('t-ops',[
+  {c:'t-out',t:'# Lab 9.1 — Ferramentas de Operações'},
+  {c:'t-cm', t:'# Comandos: help, ping, traceroute, ipconfig, netstat, nslookup, arp, iperf'},
+],{
+help:()=>`<span class="t-hl">Ferramentas de diagnóstico :</span>
+<span class="t-ok">ping</span>        → alcançabilidade ICMP
+<span class="t-ok">traceroute</span>  → mapeia caminho hop-a-hop
+<span class="t-ok">ipconfig</span>    → interfaces e configuração IP
+<span class="t-ok">netstat</span>     → conexões e portas ativas
+<span class="t-ok">nslookup</span>    → consulta DNS manual
+<span class="t-ok">arp</span>         → tabela ARP / cache
+<span class="t-ok">iperf</span>       → teste de throughput`,
+ping:()=>`<span class="t-cmd">$ ping -c 4 8.8.8.8</span>
+<span class="t-ok">64 bytes: icmp_seq=1 ttl=118 time=8.2 ms</span>
+<span class="t-ok">64 bytes: icmp_seq=2 ttl=118 time=7.8 ms</span>
+<span class="t-ok">4 packets, 0% loss, rtt avg=8.1ms</span>
+<span class="t-cm">TTL=118 → ~6 hops até o destino</span>`,
+traceroute:()=>`<span class="t-cmd">$ traceroute 8.8.8.8</span>
+ 1  192.168.1.1   1ms   <span class="t-cm">← gateway local</span>
+ 2  10.10.10.1    3ms   <span class="t-cm">← roteador ISP</span>
+ 3  200.185.0.1   5ms
+ 4  72.14.198.90  7ms   <span class="t-cm">← Google backbone</span>
+ 5  <span class="t-err">* * *</span>          <span class="t-cm">← ICMP filtrado — normal</span>
+ 6  8.8.8.8       8ms   <span class="t-ok">← destino alcançado</span>`,
+ipconfig:()=>`<span class="t-cmd">$ ip addr / ipconfig /all</span>
+<span class="t-hl">Ethernet0:</span>
+  IPv4: <span class="t-ok">192.168.1.100</span>
+  Mask: <span class="t-ok">255.255.255.0</span>
+  GW:   <span class="t-ok">192.168.1.1</span>
+  DNS:  8.8.8.8, 8.8.4.4
+  DHCP: 192.168.1.1  Lease: 24h
+  MAC:  aa:bb:cc:11:22:33`,
+netstat:()=>`<span class="t-cmd">$ netstat -an</span>
+<span class="t-ok">TCP  0.0.0.0:80</span>          LISTENING
+<span class="t-ok">TCP  0.0.0.0:443</span>         LISTENING
+<span class="t-err">TCP  0.0.0.0:3389</span>        LISTENING  <span class="t-cm">← RDP exposto!</span>
+<span class="t-ok">TCP  192.168.1.100:50231</span>  142.250.80.46:443  ESTABLISHED
+<span class="t-err">TCP  192.168.1.100:43210</span>  185.220.101.5:443  ESTABLISHED <span class="t-cm">← Tor?</span>`,
+nslookup:()=>`<span class="t-cmd">$ nslookup google.com 8.8.8.8</span>
+<span class="t-ok">google.com → 142.250.80.46</span>
+<span class="t-cmd">$ nslookup suspeito.xyz 8.8.8.8</span>
+<span class="t-err">suspeito.xyz → 185.220.101.5</span>
+<span class="t-err">⚠ IP em blacklist de Threat Intelligence!</span>`,
+arp:()=>`<span class="t-cmd">$ arp -a</span>
+<span class="t-ok">192.168.1.1   aa:bb:cc:11:22:01  [router]</span>
+<span class="t-ok">192.168.1.10  aa:bb:cc:11:22:10  [laptop]</span>
+<span class="t-err">192.168.1.1   de:ad:be:ef:00:01  [DUPLICADO!]</span>
+<span class="t-err">⚠ ARP POISONING! IP .1 com 2 MACs diferentes</span>`,
+iperf:()=>`<span class="t-cmd">$ iperf3 -c 192.168.1.20 -t 10</span>
+[  5] 0-10 sec: <span class="t-ok">1.10 GBytes  942 Mbits/sec</span>
+<span class="t-ok">✓ Link Gigabit a 94% — saudável</span>
+<span class="t-cmd">$ iperf3 -c 192.168.1.20 -u -b 100M</span>
+<span class="t-ok">Jitter: 0.3ms  Loss: 0%  — excelente para VoIP</span>`,
+})}</div>`));
+  c.appendChild(mkPage('Cap.9 · Quiz','21',mkQuiz(8,[
+    {_0:'IPAM fornece para segurança:',_1:['Firewall automático por IP','Inventário completo de IPs — detecta rogue devices imediatamente','Roteamento dinâmico','Monitoramento de links WAN'],_2:'=cCa',_3:'=4zfk5Xd9lHZ113fiBWf/NHM1RHM/R2cxBWf5BTd0Bzfg93cjVHM1BzY/RWe8Znf/NHM8kTdzlnZ1RHM1V2d/JGOwM2f0FnYkNWe3VnYw83sT7HMjBUWwUHZ+VXfxRWc5RXd9lHMxR2c1RWdUBjPj9Hd9OdZylnYkFHM9FnY/ZHM/RnfxVWYwUHM9F3YlBzY/BzYkN2f4BzY5FXZhBDPj9HdxN3f8FHMjBUWwM2fwM2f09HZwEnYkNWe3VnYw0VUAlFa'},
+    {_0:'Baselining de rede é crítico para detecção porque:',_1:['Reduz custo de WAN','Define o normal da rede','Aumenta velocidade nominal','Configura VLANs sozinha'],_2:'=Ayb',_3:'=ozZ1BmZxhXd0c2e0UnZ1R2Z9BHN71nYnFHc0sHN40zR7BFU0gzc61ne7dXdxZHN4s3tXP711ZGY41ncsFHP0EnZmt3d7RTchVWdgVHN7Bne1FWR0oze31HZ0EHc0c2e9ZWtXb2e8RDOntHe7d3egtnZkRDO7NXcyV71mBGNxBHNxlXY4tnY04yZ9VXemtne0cWd31nZg1715RTdgpXc5F2d7BHNxpXf4F3Z1Z1b'},
+    {_0:'Traceroute/tracert é usado para:',_1:['Testar throughput máximo','Mapear hops até destino','Resolver DNS reverso','Consultar tabela ARP'],_2:'=kjd',_3:'=ICfjRGL+NGfs0WZvJmpPjXbgxSasMGepBGfhN2bsMGZiVWYt9GLjxyYoJWbglmep5HLYyo7s0GegNmeskGasgWaolWavRXSskWYlhFLcF0TFxSblpnYpxCIj5Xa2xSbs02apR2bsMGai1We9xCIpxCQYhFLthnYpFWa+9WaoxifjhWbph3Y+xSbo12TsIyfl1GeilWYp53biVGLAhFWsE2Yvxyfph3Yv1Gfs0WZ6JWaskGe5Nmfp9Wb+hld'},
+    {_0:'iperf3 é usado para:',_1:['Ping com estatísticas','Medir throughput de rede entre dois pontos (TCP e UDP)','Consultar registros DNS','Verificar tabela ARP'],_2:'=ITf',_3:'==gLhl2Yup6wyVmZu92YvVGZpZHIlBCUJ9mVgEmchBHIsFWaj5WZzNXZgQJgiDycz9GbgQXZrNWYwBSZgIXZ0RXaqBSZkVWbgkSdtgCIQRUVg8GZv1EIu4DcpxDIj1CIzYmclBXagoTZ05WZpx2Qg4yctAyMmJXZwlGI6I3bklmdyV2Ug4ycvRnbvBHIzl2bkBSZyRnblBCbhVmcgQXdwh2Z19mcoRHIlRWZtByMmJXZwlWf'},
+    {_0:'Change Log completo deve conter obrigatoriamente:',_1:['Somente item alterado','Mudança, impacto e rollback','Métricas antes e depois','IPs dos ativos afetados'],_2:'=sMh',_3:'=Y9idyolduZnKi9iZ+1OWmJnNWJ2Ve5mYvYnMaZncG5mWGJ2KmplXG5mZSZnKq4lbidmKmJiYTZmMaZnVmJnW2ovYbd0TuZmaSJlXqI0YrYnMqYnO2piYfZlXuJ2ditiZy4idyI2XW5lbiN1XyZmK2JiL2J2Xy4mZiYlRiN1XyplZ2YiYTdjXyYjb2JgdidnY34lCGpiXyYjZidld2YiYT9lcmpidyIlZidkX6J2d2YiYfJ2CfJjdSJiVe5mY/5l0idnfaZmQuLh'},
+  ])));
+}
+
+/* ══ CHAPTER 9: SECURITY ══ */
+function ch9(c){
+  c.appendChild(mkPage('Cap.10 · Segurança em Camadas','22',`
+<div class="dom-badge dom-4">Domínio 4 · Segurança · 22%</div>
+<div class="ch-eye">Capítulo 10</div><h1 class="ch-h1">Segurança em Camadas</h1>
+<div class="ch-sub">Firewalls, IDS/IPS, DMZ, ACLs, hardening, Zero Trust e SASE</div><div class="ch-div"></div>
+<p class="ch-p"><strong>Defense in depth:</strong> nunca dependa de uma única camada. Cada controle compra tempo e eleva o custo do atacante.</p>
+<h2 class="ch-h2">Tipos de Firewall</h2>
+<table class="ch-tbl"><thead><tr><th>Tipo</th><th>Camada OSI</th><th>Inspeciona</th><th>Limitação</th></tr></thead><tbody>
+<tr><td>Packet Filter</td><td>3/4</td><td>IP, porta, protocolo</td><td>Stateless — não vê conexão</td></tr>
+<tr><td>Stateful</td><td>3/4</td><td>Estado TCP da conexão</td><td>Não inspeciona payload L7</td></tr>
+<tr><td>NGFW</td><td>3–7</td><td>App, usuário, TLS, ameaças</td><td>Custo e latência</td></tr>
+<tr><td>WAF</td><td>7</td><td>HTTP, SQLi, XSS</td><td>Específico para web</td></tr>
+<tr><td>UTM</td><td>3–7</td><td>AV+IPS+URL+tudo-em-um</td><td>Single point of failure</td></tr></tbody></table>
+<h2 class="ch-h2">IDS vs IPS</h2>
+<table class="ch-tbl"><thead><tr><th></th><th>IDS</th><th>IPS</th></tr></thead><tbody>
+<tr><td><strong>Posição</strong></td><td>Out-of-band (span port passivo)</td><td>Inline (no caminho do tráfego)</td></tr>
+<tr><td><strong>Ação</strong></td><td>Detecta e alerta apenas</td><td>Detecta e bloqueia</td></tr>
+<tr><td><strong>Risco</strong></td><td>Falso negativo passa</td><td>Falso positivo bloqueia legítimo</td></tr>
+<tr><td><strong>Exemplos</strong></td><td>Snort passive, Suricata IDS mode</td><td>Suricata inline, Cisco Firepower</td></tr></tbody></table>
+<h2 class="ch-h2">Arquitetura DMZ</h2>
+<div class="net-d">
+  <div class="nn nn-at">👿 Internet</div><span class="na">→</span>
+  <div class="nn nn-fw">🔥 FW Externo</div><span class="na">→</span>
+  <div style="display:flex;flex-direction:column;gap:5px;text-align:center">
+    <div class="nn nn-h">🌐 Web Server</div>
+    <div class="nn nn-h">📧 Mail Server</div>
+    <div style="font-size:9px;color:#8a6848;letter-spacing:.06em">DMZ</div>
+  </div>
+  <span class="na">→</span><div class="nn nn-fw">🔥 FW Interno</div><span class="na">→</span>
+  <div style="display:flex;flex-direction:column;gap:5px;text-align:center">
+    <div class="nn nn-h">💾 DB Server</div>
+    <div class="nn nn-h">🖥 Workstations</div>
+    <div style="font-size:9px;color:#8a6848;letter-spacing:.06em">Rede Interna</div>
+  </div>
+</div>
+<div class="box box-blue"><div class="box-icon">🔵</div><div class="box-txt"><strong>Zero Trust:</strong> "Never Trust, Always Verify" — nenhum usuário/dispositivo/rede é confiável por padrão, mesmo dentro do perímetro. Cada acesso é autenticado, autorizado e auditado individualmente.</div></div>`));
+  c.appendChild(mkPage('Cap.10 · Quiz','23',mkQuiz(9,[
+    {_0:'Diferença fundamental entre IDS e IPS:',_1:['IDS usa assinaturas; IPS usa comportamento','IDS é passivo out-of-band; IPS é inline e bloqueia tráfego','IDS bloqueia; IPS alerta','IDS opera em L7; IPS em L3 apenas'],_2:'=oTd',_3:'s42YnBnItJ3bnZnIvdmIx1WcttWYr52YvJScnZXbhNmciA3Y2B3YhF3ZmJyZm1mci4SbldGZjGMc2JSbmJSbqx2avNWYi0GbicGbr5GbrJCORJ1SiwyYrd2dz1mbgJSbhGMbiE3YvJyY2B3ZuNmInJyY2F2Z2dmZi4yK2BXbyJCbjJXciM2a0JyYrJXsBHmKiYGbjB2Lk12L2dXbi0mZjxWbrF2ax1mcigTUGtUd'},
+    {_0:'NGFW difere de firewall stateful porque:',_1:['NGFW custa menos','Inspeciona apps, usuários e L7','Usa só aceleração em hardware','NGFW não gera logs'],_2:'=MDf',_3:'=YSavucatVWancWY6l6y9tXfngHephSZthyepxWattXaqhyeptWY8V6ykdGeok2ahRGephSbosFRchSamdWYr1Ge7ZWYoQCTJhSah5HKnFmepucf71HKtxGKtxWasFGfm1GbhhSZntGKpZ2ZhtWak1me6d2aoQSIpxnenhHK7lmZthXaoc2qLbGIocGfm1WZpxnenhXZntGK6dGeosXb9u8rLn2ahRGephSarFmbhxnZtxWYoIDZ95Wb8lGf7hyZphyPEhyZru8rL3Ge7ZWYokmZnF2ahxWao8lTPZEf'},
+    {_0:'Por que a DMZ existe como zona separada?',_1:['Acelerar serviços públicos','Isolar exposição da LAN','Economizar endereços IP','Bloquear acesso de usuários'],_2:'=w8g',_3:'YfJmEOpgY+p1TK5kEa9lEephWz6uya9lSadhXK5lfW5nY+p1FO5Q144kYmZlWf5nTO4hZqJlWnJmEOpgY+p1hCr1YfJmEOpgY+p1TK5kEa9lYadmVVDmWrNr7Kr1Xip1XVjgFOp1TKImXW5lCep1anpkfK4kbmJhGuZmVa9klaN2COJmEOpgY+p1XKp1F+5kAuVNFW4kVep1FOJhZK5nAS4kFa9lEephWnpkXqZmF+p1ZKImTuZkTWo1X+JhVaNr7K7g'},
+    {_0:'"Never Trust, Always Verify" é base de qual modelo?',_1:['Defense in Depth','Perimeter Security','Zero Trust Architecture','SASE'],_2:'=Ysi',_3:'==g1dyoldWJlZ2InR6YkcaZkYfJnZyYkc2YmY3J2XyZmCGpiXyYjZiN1XyZmbGJjW2JjNmJ2RtD2Xu4iduZmYnJnZuL2WfpiM2ZlVtjidiI2XyJ2XqIjW2JnYfZlL2ZlYzGeag9lbtjicmJiYr4lIiNld6YW7EpnWe5mYH1OY3JndqI2NeJ2X6YkMG5iXi4iRyJ2UfZkKm1ONuYjYXZjQaZnWidnNmI2dWZjLuYmYz4iNqIrYfpidKqi'},
+    {_0:'Hardening de dispositivos de rede inclui OBRIGATORIAMENTE:',_1:['SNMP v1 por legado','Remover serviços e padrões','Portas admin abertas','WEP para autenticação'],_2:'=4dk',_3:'M7aojK8gLSpwR2YgLS4ThE4hSG5hCHpsrK8gC3olMe4jDuYgMeIkHWowHaowNGZkHG4gCD5gWu4jL6owO3YQhAphDKpwRu4gLGIjHa4hQGowROowROohNapwQOIkHapjDKszLHNlCD5gRepyCDNlNPNlCL7rsGrwOvsqxGrwQOYkXqswWeIjOeotC78yxKrt2qqwQOYkXqswyartqKMkDa5iOuIgDG5hGKM2N+4iM+UIPKchMuIjHaIkDqak'},
+  ])));
+}
+
+/* ══ CHAPTER 10: ATTACKS ══ */
+function ch10(c){
+  c.appendChild(mkPage('Cap.11 · Ataques em Redes','24',`
+<div class="dom-badge dom-4">Domínio 4 · Segurança</div>
+<div class="ch-eye">Capítulo 11</div><h1 class="ch-h1">Ataques e Ameaças em Redes</h1>
+<div class="ch-sub">MITM, DoS/DDoS, port scanning, spoofing e rogue devices</div><div class="ch-div"></div>
+<div class="box box-rose"><div class="box-icon">⚖️</div><div class="box-txt"><strong>Ética:</strong> Conteúdo educacional para defesa. Nunca teste técnicas sem autorização explícita por escrito.</div></div>
+<h2 class="ch-h2">ARP Poisoning / MITM</h2>
+<div class="diagram">Normal: <strong style="color:#3a8a5a">Vítima</strong> ←→ <strong style="color:#2a6aaa">Gateway</strong><br>Após ARP Poisoning:<br><strong style="color:#3a8a5a">Vítima</strong> → <strong style="color:#c8506a">Atacante (MITM)</strong> → <strong style="color:#2a6aaa">Gateway</strong><br><span style="font-size:11px;color:#8a6848">Atacante vê e pode modificar TODO o tráfego</span></div>
+<p class="ch-p">Mitigações: <strong>Dynamic ARP Inspection (DAI)</strong> em switches, arpwatch, entradas ARP estáticas em hosts críticos.</p>
+<h2 class="ch-h2">DoS e DDoS</h2>
+<table class="ch-tbl"><thead><tr><th>Ataque</th><th>Mecanismo</th><th>Mitigação</th></tr></thead><tbody>
+<tr><td>SYN Flood</td><td>Milhares de SYN sem ACK</td><td>SYN cookies, rate limiting</td></tr>
+<tr><td>UDP Flood</td><td>UDP em portas aleatórias</td><td>Rate limit UDP</td></tr>
+<tr><td>HTTP Flood</td><td>GETs/POSTs em massa</td><td>WAF, CAPTCHA, CDN</td></tr>
+<tr><td>DNS Amplification</td><td>Query pequena → resposta 70× maior</td><td>Fechar resolvers abertos</td></tr>
+<tr><td>Slowloris</td><td>Conexões HTTP incompletas persistentes</td><td>Limite de conexões/IP, timeout</td></tr>
+<tr><td>Ping of Death</td><td>ICMP oversized (>65535 bytes)</td><td>Filtrar ICMP fragmentado</td></tr></tbody></table>
+<h2 class="ch-h2">Rogue Devices</h2>
+<ul class="ch-ul">
+<li><strong>Rogue AP:</strong> ponto de acesso não autorizado — backdoor físico</li>
+<li><strong>Evil Twin:</strong> AP falso com mesmo SSID atraindo clientes</li>
+<li><strong>Rogue DHCP:</strong> servidor distribuindo gateway falso</li>
+<li><strong>Detecção:</strong> WIDS, 802.1X port authentication, NAC</li>
+</ul>`));
+
+  c.appendChild(mkPage('Cap.11 · Lab Scanning · Quiz','25',`
+<div class="lab"><div class="lab-hd"><span class="lab-badge">⚗ Lab 11.1</span><span class="lab-title">Port Scanning e Reconhecimento</span></div>
+<div class="lab-desc">Simule scans e interprete resultados como defender.</div>
+${mkTerm('t-atk',[
+  {c:'t-out',t:'# Lab 11.1 — Reconhecimento de Rede'},
+  {c:'t-cm', t:'# Comandos: help, nmap-ping, nmap-syn, nmap-vuln, arp-check, mitm-detect'},
+],{
+help:()=>`<span class="t-hl">Comandos:</span>
+<span class="t-ok">nmap-ping</span>    → host discovery
+<span class="t-ok">nmap-syn</span>     → SYN scan stealth (-sS)
+<span class="t-ok">nmap-vuln</span>    → vulnerability scan
+<span class="t-ok">arp-check</span>    → verifica tabela ARP
+<span class="t-ok">mitm-detect</span>  → heurísticas MITM`,
+'nmap-ping':()=>`<span class="t-cmd">$ nmap -sn 192.168.1.0/24</span>
+<span class="t-ok">192.168.1.1</span>   Netgear Router
+<span class="t-ok">192.168.1.10</span>  Windows 10 Workstation
+<span class="t-ok">192.168.1.20</span>  Ubuntu 22.04 Server
+<span class="t-err">192.168.1.50</span>  Desconhecido — novo!  <span class="t-cm">← verificar!</span>
+<span class="t-ok">4 hosts up</span> de 256 escaneados`,
+'nmap-syn':()=>`<span class="t-cmd">$ nmap -sS -p 1-1000 192.168.1.20</span>
+<span class="t-ok">22/tcp  open  ssh</span>    <span class="t-cm">← OpenSSH</span>
+<span class="t-ok">80/tcp  open  http</span>   <span class="t-cm">← Apache</span>
+<span class="t-ok">443/tcp open  https</span>  <span class="t-cm">← TLS</span>
+<span class="t-err">3306/tcp open mysql</span>  <span class="t-err">← ALERTA! MySQL exposto!</span>
+<span class="t-cm">SYN scan: SYN→SYN-ACK→RST. Nunca completa handshake (stealth)</span>`,
+'nmap-vuln':()=>`<span class="t-cmd">$ nmap --script vuln 192.168.1.20</span>
+<span class="t-err">VULNERABLE: CVE-2021-41773 (Apache path traversal)</span>
+<span class="t-err">VULNERABLE: MySQL root sem senha!</span>
+<span class="t-err">Prioridade CRÍTICA — corrigir imediatamente!</span>`,
+'arp-check':()=>`<span class="t-cmd">$ arp -a</span>
+<span class="t-ok">192.168.1.1</span>   aa:bb:cc:11:22:01  router
+<span class="t-ok">192.168.1.10</span>  aa:bb:cc:11:22:10  laptop
+<span class="t-err">192.168.1.1</span>   de:ad:be:ef:99:01  DUPLICADO!
+<span class="t-err">⚠ ARP POISONING! Isolar 192.168.1.50 imediatamente</span>`,
+'mitm-detect':()=>`<span class="t-hl">Heurísticas MITM:</span>
+<span class="t-err">✗ Latência aumentou 40ms sem mudança de rota</span>
+<span class="t-err">✗ ARP reply sem request anterior</span>
+<span class="t-err">✗ Gateway MAC mudou às 00:03:15</span>
+<span class="t-ok">✓ DAI ativo no switch — bloqueando tráfego suspeito</span>`,
+})}
+</div>
+${mkQuiz(10,[
+  {_0:'Slowloris é eficaz porque:',_1:['Consome banda massiva','Segura conexões HTTP abertas','Explora overflow no kernel','Cifra tráfego para evasão'],_2:'=0sg',_3:'==g2cCIkdOIkaWplUv5lBuJhUbYkBWYkmSt2H2ZkCm1NauJhH2JkUfYkBdDjRq5mXS9mQqZlAu5kHGJ1YX5kRy5lUX5laGomUHZgFS9mAeYkGS9mUXphRS4hRSthbCZnCaYkHS9uUr9hbCYkYSYmbepmdS9hGGJkVGJnUvJkaWZnCqZkUfYlAaYkWWJ1kCKo8S9hRG0NMGpmbeJ1RCJ1HWpmRComReJ1Z21NAqZlZS9hda4mYO4mYeqg'},
+  {_0:'DNS Amplification usa:',_1:['Criptografa as queries','Amplia resposta via spoofing','Desativa recursão DNS','Envenena cache local'],_2:'=Yci',_3:'=I9a/w8ycX1PI2J3T+1Pb9TnfWpmVCJjR2J3ZiJ3OOJidqL3S3ZkViYU/oI3diJ3sWL3TydnO2JjcX9jZiYheyNzMzMyCSN3PmJmS2pjby9jTiZnYydkT+J3ZipkTy4jZ6I3OmpiQO5jZ6K3S3ZkViYU/oI3diJ3sWL3Z+pjJO5jcH5kfytjZqIkT+YmOytkZy4kc3pjdyI3V/YmIWonczsyCSN3dKZmJ2YmMydhOmZiNytxSOZlI25nVqZlQyYk9y9ryibi'},
+  {_0:'Rogue AP representa:',_1:['Força bruta em senhas Wi-Fi','AP não autorizado instalado na rede — backdoor ou MITM','Jamming do sinal legítimo','Exploit no firmware do AP'],_2:'=8Nk',_3:'KX4QnoYhWG5gBeJxBCIxXGIiLaJkKu4hEvIgKWoiWuIkKu4hEHIgBaJxEdCxLe5lBeYhE70JSuol0SsyLeYjXm0JCS8iXeZgHWIxJu4hEHIkKW4hFCZhEH5iEbZgA24lK2IxWuIlEvIgFiYhQepiNSslBeJxBC4i0SsyLe0JDdShe2olLCZkFSciBeJxLCYhIWIkXqYjEv4lXG4hFScgAS8iQq4iUSs30WKxBG5gLaLk'},
+  {_0:'ARP Poisoning é mitigado principalmente por:',_1:['Port Security (limite de MACs)','Dynamic ARP Inspection (DAI)','STP BPDU Guard','DHCP Snooping'],_2:'=g9l',_3:'=o8gK2oiLeZjLSJx0abpEXYjBGZlLiohEDHZGQMkXuIjEvYhEnYgHqYgQaZgUS8iHdiiEHYkVS8l02KxJu4hEfZgNiIlBaJx0abpEbZhNKpiBSciBC4iUS8iHdiiEDYgQeZkWCpiRS8lFCplLSLxKPoiNS5iLq4tET7psCKxLCIxXOoiNCoiNaIxBCIxFiYgGWIkEXIxFaJkKu4hETrtlS8lBC5iHWIlEXIgNiYhSScrlC6l'},
+  {_0:'SYN scan (-sS) é "stealth" porque:',_1:['Usa pacotes cifrados','Completa o handshake','Envia RST antes de abrir sessão','Troca TCP por UDP'],_2:'=Itn',_3:'CL4gPmonMTImA2YiY+JzN6Zjcy8nJipgN+YjY2IzeOInMPIiF6ZiKmon8yswNqZhY2ImCmImM3IzB2onY+ZhLmonMP4TvIIzD+0LL9SjPWIgc2IzJiIzLOIgMnIiM/ZjBmImfW4nM/5gYWYmBy8gP9CmCmIzAnImCmYgNiZiAyZgD+IzNiYhPmIgJ6YjY+ZiMX0LM34jCmpgMz7r4y8gP9ClJK4gPycrMLMu/6Lz+pmDMf6rtGso1+Lz+pmDMLat/ys1C24jfyso1+rn'},
+])}
+`));
+}
+
+/* ══ CHAPTER 11: TRAFFIC ANALYSIS ══ */
+function ch11(c){
+  c.appendChild(mkPage('Cap.12 · Análise de Tráfego','26',`
+<div class="dom-badge dom-4">Domínio 4 · Segurança</div>
+<div class="ch-eye">Capítulo 12</div><h1 class="ch-h1">Análise de Tráfego e Forense</h1>
+<div class="ch-sub">Wireshark, Zeek, NetFlow, PCAP, IoCs e Threat Hunting</div><div class="ch-div"></div>
+<h2 class="ch-h2">Ferramentas de Análise</h2>
+<table class="ch-tbl"><thead><tr><th>Ferramenta</th><th>Uso</th><th>Ponto forte</th></tr></thead><tbody>
+<tr><td>Wireshark</td><td>Análise visual de pacotes</td><td>Filtros BPF, follow stream, dissectors</td></tr>
+<tr><td>tcpdump</td><td>Captura em CLI</td><td>Leve, scriptável, sem GUI</td></tr>
+<tr><td>Zeek (Bro)</td><td>Análise comportamental</td><td>Logs estruturados por protocolo</td></tr>
+<tr><td>Suricata</td><td>IDS/IPS com regras</td><td>EVE JSON, alta performance</td></tr>
+<tr><td>NetworkMiner</td><td>Extração de artefatos de PCAP</td><td>Reconstrói sessões e arquivos</td></tr>
+<tr><td>Arkime (Moloch)</td><td>Full packet capture indexada</td><td>Busca histórica em escala</td></tr></tbody></table>
+<h2 class="ch-h2">Filtros Wireshark Essenciais</h2>
+<div class="code"><div class="code-lbl">Filtros de display — operações diárias SOC</div><pre><span class="cm"># SYN puros — port scan</span>
+tcp.flags.syn==<span class="nm">1</span> &amp;&amp; tcp.flags.ack==<span class="nm">0</span>
+
+<span class="cm"># ARP suspeito (reply sem request)</span>
+arp.opcode==<span class="nm">2</span> &amp;&amp; frame.len &lt; <span class="nm">50</span>
+
+<span class="cm"># DNS longo — possível tunneling</span>
+dns.qry.name.len &gt; <span class="nm">50</span>
+
+<span class="cm"># Exfiltração por volume</span>
+ip.src == <span class="st">10.0.0.50</span> &amp;&amp; tcp.len &gt; <span class="nm">1400</span>
+
+<span class="cm"># Lateral movement SMB</span>
+smb2.cmd == <span class="nm">11</span>
+
+<span class="cm"># HTTP POST suspeito</span>
+http.request.method == <span class="st">"POST"</span></pre></div>
+<h2 class="ch-h2">IoCs de Rede Mais Comuns</h2>
+<ul class="ch-ul">
+<li><strong>Beaconing:</strong> conexões em intervalos regulares para IP externo fixo</li>
+<li><strong>DNS suspeito:</strong> subdomínios longos/aleatórios, TLDs incomuns (.xyz, .tk)</li>
+<li><strong>Large outbound:</strong> gigabytes saindo de host que não deveria exportar dados</li>
+<li><strong>Non-browser HTTP:</strong> User-Agent vazio, antigo (IE6 em 2026!) ou incomum</li>
+<li><strong>Internal scanning:</strong> host interno fazendo SYN para múltiplos hosts internos</li>
+</ul>
+<div class="lab"><div class="lab-hd"><span class="lab-badge">⚗ Lab 12.1</span><span class="lab-title">Análise de PCAP Suspeito</span></div>
+<div class="lab-desc">Analise tráfego simulado e identifique IoCs.</div>
+${mkTerm('t-pcap',[
+  {c:'t-out',t:'# Lab 12.1 — Análise de PCAP'},
+  {c:'t-cm', t:'# Comandos: help, load-pcap, show-dns, show-http, show-flows, find-ioc'},
+],{
+help:()=>`<span class="t-hl">Comandos:</span>
+<span class="t-ok">load-pcap</span>   → carrega capture suspeito
+<span class="t-ok">show-dns</span>    → analisa queries DNS
+<span class="t-ok">show-http</span>   → tráfego HTTP anômalo
+<span class="t-ok">show-flows</span>  → NetFlow top talkers
+<span class="t-ok">find-ioc</span>    → relatório de IoCs`,
+'load-pcap':()=>`<span class="t-hl">Carregando suspect_capture.pcap...</span>
+Tamanho: 847 MB | Duração: 4h 32min
+Pacotes: 6.847.291
+Protocolos: <span class="t-ok">TCP 78%</span> UDP 19% ICMP 2%
+<span class="t-ok">✓ Use show-dns, show-http, show-flows</span>`,
+'show-dns':()=>`<span class="t-hl">DNS — Anomalias:</span>
+<span class="t-err">47.329 queries → *.update-service[.]xyz</span>
+<span class="t-err">  Subdomínios: eJxNjMEKwjAQRH9l2p3... (base64!)</span>
+<span class="t-err">  Comprimento médio: 63 chars (normal: &lt;20)</span>
+<span class="t-err">  Frequência: 1 query/30s por 4h → beaconing!</span>
+<span class="t-err">IoC: DNS Tunneling / C2 — 10.10.5.103</span>`,
+'show-http':()=>`<span class="t-hl">HTTP Anômalo:</span>
+<span class="t-err">POST /api/update HTTP/1.1</span>
+  Host: cdn-cache[.]services
+  <span class="t-err">User-Agent: Mozilla/4.0 (MSIE 6.0)</span>  <span class="t-cm">← IE6 em 2026?!</span>
+  <span class="t-err">X-Session: dGhpcy1pcy1leGZpbHRyYXRlZA==</span>
+<span class="t-cm">Decodificado: "this-is-exfiltrated"</span>
+<span class="t-err">IoC: Exfiltração via HTTP POST + UA anacrônico</span>`,
+'show-flows':()=>`<span class="t-hl">Top NetFlow:</span>
+<span class="t-err">10.10.5.103 → 185.220.101.5:443  4.2GB  3h40m</span>  <span class="t-cm">← Tor exit!</span>
+<span class="t-err">10.10.5.103 → 94.130.22.89:8080  2.1GB  2h15m</span>  <span class="t-cm">← ASN RU</span>
+<span class="t-ok">10.10.5.1   → 8.8.8.8:53        12MB   4h32m</span>   <span class="t-cm">← DNS normal</span>`,
+'find-ioc':()=>`<span class="t-hl">Relatório IoCs:</span>
+<span class="t-err">■ [CRÍTICO] DNS Tunneling — 10.10.5.103 → update-service[.]xyz</span>
+<span class="t-err">■ [CRÍTICO] 4.2GB exfiltrados → Tor exit node</span>
+<span class="t-err">■ [ALTO] User-Agent IE6 — malware</span>
+<span class="t-err">■ [ALTO] Beaconing a cada 30s por 4h32m</span>
+<span class="t-ok">Ação: Isolar 10.10.5.103, imagem forense, abrir DFIR</span>`,
+})}
+</div>`));
+  c.appendChild(mkPage('Cap.12 · Quiz','27',mkQuiz(11,[
+    {_0:'Filtro Wireshark para SYN puros (port scan):',_1:['tcp.flags == 0x02','tcp.syn == true and tcp.ack == false','tcp.flags.syn==1 && tcp.flags.ack==0','ip.proto == 6 and tcp.syn'],_2:'=M8j',_3:'=QdlUOpjJ+pnajYlKqNibiojWOJnavJibqo2EXJjWupxHfsjJ6J1KOp2czt2fSZlTm5keur2Uj4mO+plKeZlZq9lfmo2JS7opqdiV64kPep2bi4ndqNlbmZia7IiVqq2UnYleu5kZOJlTqdlZlDlan4nRupkJ6JlbKp2upHGaHbu7q9lfmo20Oaqa/pjU+5lb64mC+p2bi4jOq4mZqtyHfckZuJ1J25mWyJ1KmpjazN3av8xHT5gJSdiduplcStiZ64j'},
+    {_0:'Beaconing de malware é caracterizado por:',_1:['Volume alto em horário útil','Conexões externas periódicas','Queries DNS para buscadores','CPU alta no servidor'],_2:'=ktl',_3:'==gzX+IjmSZhuCchECchTmIjBNijBCskPCJwPSYgUOYhUWIpA78kBK5jICchEC8jDNyRjEokVSIwM/ojJS5kFSIwFSIwwmKwP24kF2IwMn8kQbNwMPJ0TjMwTWIlOWIlTm4kO+4gAP5jMGolSWIlOmIwa/4QjIJhBCLwOPZhSGIjVeYhSC8kPyYgWKZhU6YiA3YhAL9oAL5jEmolSW4kA34jDCcgDmojV24jDCchSG4lMGYjAr9hOmojPOYgFKql'},
+    {_0:'NetFlow é preferido sobre PCAP para longo prazo porque:',_1:['Captura payload completo','Guarda metadados escaláveis','Suporta protocolos extras','Classifica malware melhor'],_2:'=Idn',_3:'=QchcOonDi4gFipmK/YjLiZhempyH+YmKvYiDiZWp4ZmDKoyPm5gGuUKEuoyP65gHi5j6qMxFmUKNlyiY+pjK/oyZ+onTioyGPchGWYiF6ZhYqpyGn5ieiZhaqsxZq7oCr8jGq5nee83Kn5iE+omLq8iY6ZmD24jYqcnFaIre+IpKT8wLOojKjZhaqcmo6rwKXIkLipmKXYjEWohKvoyG+InLlygcS4gKPUKKXonPaomHWYiKr7qpqbn'},
+    {_0:'Zeek difere do Wireshark principalmente porque:',_1:['Tem GUI mais avançada','Gera logs estruturados','Captura pacotes mais rápido','Suporta protocolos extras'],_2:'=sOp',_3:'=o/p9Wbow2ro9Cru9S/pxC6u3WLp0HLs0jbthqbt5Sfsn2Lu1dhu1SftmWLp033F0/rp1y7pxaavDSv+1ibt3eas0nbs0v7dXM3F1ibsma6u3Sfsg2bumGLh0r/tgGL9zuLu6fas42rs0j/s7ir+4e6p0j/s7ir+kCKo8SP+zuLu6fquwSP+zuLu6rru7eL9uHLo6Gbu1ebvgWbu7Cao1S/p7CbtmGKohaKonGL9nO7u4SftmG7s0/bsx6Ip'},
+    {_0:'User-Agent "Mozilla/4.0 (MSIE 6.0)" em tráfego 2026 indica:',_1:['Usuário conservador com IE antigo','Possível malware — nenhum browser legítimo usa IE6 em 2026','Dispositivo IoT antigo','Proxy corporativo reescrevendo UAs'],_2:'=Q+q',_3:'0Tbt5u7v4qP6Zq/r1q/u+uLoza7uv66up+rv63Ltziqrpq/t1mr+/i6uta7u3q/v+qPq167u5Orv0Or+/6Kq1yr+zlh+qTP76/5kJep+uS7v9u59o+bqPqv9sju6or/tfqP9svu6or/t/qft+u7r0Orr0Wbup+rv6Pbt8qP7fO5q'},
+  ])));
+}
+
+/* ══ CHAPTER 12: TROUBLESHOOTING ══ */
+function ch12(c){
+  c.appendChild(mkPage('Cap.13 · Troubleshooting Sistematizado','28',`
+<div class="dom-badge dom-5">Domínio 5 · Troubleshooting · 17%</div>
+<div class="ch-eye">Capítulo 13 — Final</div><h1 class="ch-h1">Troubleshooting Sistematizado</h1>
+<div class="ch-sub">7 passos de diagnóstico  · Sintomas wired, wireless, DNS e DHCP</div><div class="ch-div"></div>
+<h2 class="ch-h2">Os 7 Passos </h2>
+${[
+  {n:1,t:'Identificar o Problema',d:'Coletar info do usuário. O que mudou? Quando? Quantos afetados? Replicar o problema se possível.'},
+  {n:2,t:'Estabelecer uma Teoria',d:'Hipótese baseada nos sintomas. Bottom-up (física primeiro) ou top-down (aplicação primeiro).'},
+  {n:3,t:'Testar a Teoria',d:'Confirmar ou refutar. Se confirmada, avance. Se refutada, formule nova teoria com as novas informações.'},
+  {n:4,t:'Plano de Ação',d:'Definir como resolver e minimizar impacto. Comunicar partes afetadas. Janela de manutenção se necessário.'},
+  {n:5,t:'Implementar a Solução',d:'Aplicar a correção. Se falhar, reverter e testar nova teoria. Documentar cada tentativa.'},
+  {n:6,t:'Verificar Funcionalidade',d:'Confirmar resolução. Testar cenários adjacentes. Garantir que não criou novo problema.'},
+  {n:7,t:'Documentar Tudo',d:'Registrar: problema, causa raiz, solução, tempo de resolução. Base de conhecimento para o futuro.'},
+].map(s=>`<div class="trbl-step"><div class="trbl-n">${s.n}</div><div class="trbl-txt"><strong>${s.t}</strong> — ${s.d}</div></div>`).join('')}
+<h2 class="ch-h2">Sintomas Comuns</h2>
+<table class="ch-tbl"><thead><tr><th>Sintoma</th><th>Causa provável</th><th>Verificar</th></tr></thead><tbody>
+<tr><td>Link não estabelece</td><td>Cabo ruim, NIC defeituosa, porta desabilitada</td><td>Luzes da porta, cable tester, show int</td></tr>
+<tr><td>100M em vez de 1G</td><td>Duplex/speed mismatch, cabo Cat5 antigo</td><td>Autoneg settings, show interface</td></tr>
+<tr><td>APIPA (169.254.x.x)</td><td>DHCP não respondendo, VLAN errada</td><td>DHCP server status, porta do switch</td></tr>
+<tr><td>Sem gateway</td><td>Config incorreta, DHCP scope errado</td><td>Default gateway, rota padrão</td></tr>
+<tr><td>DNS falha mas IP funciona</td><td>Servidor DNS down, cache corrompido</td><td>nslookup, ipconfig /flushdns</td></tr>
+<tr><td>Wi-Fi conecta sem internet</td><td>Gateway/DNS mal configurado, NAT quebrado</td><td>Ping GW, ping 8.8.8.8, nslookup</td></tr>
+<tr><td>Interferência Wi-Fi</td><td>Canal sobreposto, micro-ondas, vizinho</td><td>Wi-Fi analyzer, mudar canal</td></tr>
+<tr><td>CRC errors interface</td><td>Cabo ruim, crimping defeituoso, EMI</td><td>Certificador de cabling, trocar cabo</td></tr></tbody></table>`));
+  c.appendChild(mkPage('Cap.13 · Quiz Final','29',mkQuiz(12,[
+    {_0:'PRIMEIRO passo do troubleshooting :',_1:['Implementar a solução mais óbvia','Identificar o problema coletando informações','Verificar a funcionalidade','Estabelecer teoria de causa'],_2:'=MNn',_3:'==gxHu0KPtSiE25iNi5mNicQrgciBq5hNyJya2YnZSYidmJyE3InG2YgLGojduJyH6ohBichNuLyGrZiLGIhY2omIT8mHyYicuYiYWYgIv5hcaYidmJyE35hM2ZhI3YnZi8hIrZgaq4hLuZjMiMxHGomJtSnb2JyHyIyb2YXr80KJWomH6ohBismJyZjEe4qIbciF2IhKeomYi8hIrZiLGojByphNyYgILdjaiZhNuJyHu5mJiJyHqZgNWYgaiLn'},
+    {_0:'IP 169.254.x.x em um usuário indica:',_1:['Conflito de IP na rede','DHCP não respondeu — APIPA atribuído automaticamente','Subnet mask incorreta no DNS','Gateway errado no host'],_2:'=w+o',_3:'==g+1Cbtg2Lu9abt8SPv3CavjeK97CL91Cqp7SK94XLoxaqp7eL9aWJmCSft6SPonuLv0j/ui2Lo1SvpxKqpxeK9EeJnQSv7mW7t9KbvmGrg0rPhXyJk0n7u3S/ugWLo6u7t0HbozG7p6u7t0v7dXoL97Cru1Gap0HLo6Gbu1ebvgWbu7Cao1SfvhabvmCat0f6o7Cru9OI96XJhdSYl0nO9sqPr6De4mrf7iX+o'},
+    {_0:'Usuário faz ping no gateway (8.8.8.8) mas não acessa sites por nome. Problema:',_1:['Gateway padrão incorreto','DNS — resolução de nomes falha, conectividade IP está OK','Firewall bloqueando 80/443','Cabo com CRC errors'],_2:'=Uuq',_3:'==g81/qs4S7rpCruzz/u1qrsz+Lr1SP/5S7v9+L/u2LrxWLs8Df9sm6tzOLsvKL98P7ffs3HpC7svmrr87avo+auoyP81vbt6K7s/yat0z/s42rrpubt6K7s/y/jSiJ/uOLu1qqr5+K/m7av/Wru16auKyv8PKJm8Prs83bs5Crvz6Kr87kW+wfs9SLs9qL/vmbszKL/v2bs8X/lTyfu42Lu1qato+buyO7v0zfvyObt/Kbq6yPjVyfvu2Lr8vrs1yoq'},
+    {_0:'Teoria de troubleshooting refutada — próximo passo:',_1:['Implementar solução e verificar','Documentar e encerrar','Formular nova teoria com novas informações','Escalar imediatamente'],_2:'=0fs',_3:'=4epzWKtzNAspiK4h2aq4O3AyCL4hCerhmatnCep1GL4z+KphSK4lOapuK7rmC+rjNwZDEKt1aapSCu7u7ushS7slSL4SZkIgPbokmKti+K4zmaou+aqjmKphC+slW3AnNQotK7rm6aqg36rjCegJK5jFSJ4Ba5jOCuUGJC4dGKphKrslCepzuJ4SZkIgLbo0Obp0CuUGJC4hmqsvWKtgLlRiAushOaqmmKtuWKppCu+vy6opOYs'},
+    {_0:'CRC errors em interface de switch indicam:',_1:['Problema de VLAN','Cabo ou crimping defeituoso — erros de transmissão física','DHCP esgotado','MAC flooding em andamento'],_2:'=cPu',_3:'=Yuupuao8u7pm+aqhyK6pqbq4i+rmGKpqm6qo3Kror7psm6qh6ao8qbrrier72J6mn6un2Lvh2qrtyK6LGohoTegF2I6kfqo9uL66eKvr2qpnuK6kXao9qL6vaao4Wao6uK6kfKrpuaouGqppyK6nqaqriu8nuao7W2Cuieql2Kpqequ4ie9ov7psGKulequ6e6qofKrmm6rtC6qovbrlmquuie9ovrunqruti+iauIu'},
+  ])));
+}
+
+/* ══ INTERACTIVE HELPERS ══ */
+function togOsi(n){
+  const d=document.getElementById(`od-${n}`);const row=d?.previousElementSibling;if(!d)return;
+  const open=d.classList.contains('show');
+  document.querySelectorAll('.osi-det').forEach(x=>x.classList.remove('show'));
+  document.querySelectorAll('.osi-row').forEach(x=>x.classList.remove('open'));
+  if(!open){d.classList.add('show');row?.classList.add('open');}
+}
+function calcSub(){
+  const ip=(document.getElementById('sub-ip')?.value||'').trim();
+  const cidr=parseInt(document.getElementById('sub-cidr')?.value)||24;
+  const res=document.getElementById('sub-res');if(!res)return;
+  if(cidr<0||cidr>32){res.innerHTML='<span style="color:#c8506a">Prefixo inválido</span>';res.className='sub-res show';return;}
+  const p=ip.split('.').map(Number);
+  if(p.length!==4||p.some(x=>isNaN(x)||x<0||x>255)){res.innerHTML='<span style="color:#c8506a">IP inválido</span>';res.className='sub-res show';return;}
+  const ipN=(p[0]<<24|p[1]<<16|p[2]<<8|p[3])>>>0;
+  const mN=cidr===0?0:(~0<<(32-cidr))>>>0;
+  const nN=(ipN&mN)>>>0,bN=(nN|(~mN>>>0))>>>0;
+  const h=cidr>=31?(cidr===32?1:2):Math.pow(2,32-cidr)-2;
+  const f=n=>[(n>>>24)&255,(n>>>16)&255,(n>>>8)&255,n&255].join('.');
+  const fm=m=>[(m>>>24)&255,(m>>>16)&255,(m>>>8)&255,m&255].join('.');
+  res.className='sub-res show';
+  res.innerHTML=`<span class="sr-k">Rede:          </span><span class="sr-v">${f(nN)}/${cidr}</span>
+<span class="sr-k">Máscara:       </span><span class="sr-v">${fm(mN)}</span>
+<span class="sr-k">Primeiro host: </span><span class="sr-v">${f(nN+1)}</span>
+<span class="sr-k">Último host:   </span><span class="sr-v">${f(bN-1)}</span>
+<span class="sr-k">Broadcast:     </span><span class="sr-v">${f(bN)}</span>
+<span class="sr-k">Hosts úteis:   </span><span class="sr-v">${h.toLocaleString('pt-BR')}</span>`;
+}
+function showPort(p,n,d,sec){const b=document.getElementById('port-detail');if(!b)return;b.style.display='block';b.innerHTML=`<strong style="color:var(--rose)">Porta ${p} — ${n}</strong><br>${d}<br><span style="color:#7a1020">⚠ Segurança: ${sec}</span>`;}
+function showBand(f,det){const b=document.getElementById('band-detail');if(!b)return;b.style.display='block';b.innerHTML=`<strong style="color:var(--rose)">${f}</strong> — ${det}`;document.querySelectorAll('.band-card').forEach(c=>{c.classList.remove('sel');if(c.querySelector('.band-freq')?.textContent===f)c.classList.add('sel');});}
+function showCable(cat,det){const b=document.getElementById('cable-detail');if(!b)return;b.style.display='block';b.innerHTML=`<strong style="color:var(--gold)">${cat}</strong> — ${det}`;document.querySelectorAll('.cable-c').forEach(c=>{c.classList.remove('sel');if(c.querySelector('.cable-cat')?.textContent===cat)c.classList.add('sel');});}
+
+
+/* ══ DEEP DIDACTIC PAGES · adicionadas sem quebrar os labs existentes ══ */
+const DEEP=[
+{t:'Antes de culpar o firewall: camadas e evidência',p:`<p class="ch-p">O modelo OSI não existe para decorar número de camada e ganhar estrelinha imaginária. Ele existe para impedir que você investigue um problema de DNS olhando cabo, ou culpe o roteador por uma sessão TCP que nem fechou handshake. Em segurança, isso muda tudo: cada ataque deixa evidência em uma camada diferente.</p><p class="ch-p">No lab deste capítulo, quando você executa <strong>netstat</strong>, <strong>handshake</strong>, <strong>flags</strong> e <strong>encap</strong>, você está treinando o caminho mental correto: identificar estado da sessão, camada afetada, protocolo envolvido e possível abuso. É assim que se separa pane real de teatro de alerta.</p><div class="deep-grid"><div class="deep-card"><strong>Erro comum</strong><span>Ver porta aberta e concluir “vulnerável”. Porta aberta é contexto, não sentença judicial.</span></div><div class="deep-card"><strong>Raciocínio correto</strong><span>Serviço, exposição, origem, destino, estado TCP, política esperada e evidência de abuso.</span></div></div><div class="deep-scenario"><span class="warn">cenário:</span> Muitas conexões SYN para 443, sem ACK final.<br><span class="bad">chute ruim:</span> “HTTPS caiu”.<br><span class="ok">análise boa:</span> possível SYN flood, scan half-open ou filtragem interferindo no handshake.</div>`},
+{t:'Subnetting sem drama: segmentar é conter incêndio',p:`<p class="ch-p">Endereço IP não é só número bonitinho para colocar na planilha. Ele define alcance, roteamento, broadcast, segmentação e, principalmente, o tamanho do estrago quando alguém compromete uma máquina. Uma rede /16 plana é basicamente um condomínio sem porta, sem síndico e com o invasor usando crachá.</p><p class="ch-p">A calculadora de sub-rede do lab serve para treinar leitura de rede, broadcast, hosts úteis e máscara. Isso aparece na prática quando você precisa separar usuários, servidores, câmeras, VoIP, convidados, gerenciamento e laboratório. Misturar tudo é confortável até o primeiro malware descobrir que lateral movement também gosta de preguiça arquitetural.</p><div class="deep-grid"><div class="deep-card"><strong>Na defesa</strong><span>Sub-redes menores reduzem broadcast, melhoram controle e permitem ACLs mais claras.</span></div><div class="deep-card"><strong>No ataque</strong><span>Faixas mal segmentadas facilitam varredura, enumeração e movimento lateral.</span></div></div><div class="deep-scenario"><span class="warn">lab:</span> Calcule /26 e observe hosts úteis.<br><span class="ok">interpretação:</span> 62 hosts por segmento, bom para departamentos pequenos.<br><span class="bad">cilada:</span> colocar servidor crítico junto com estação de usuário porque “estava sobrando IP”.</div>`},
+{t:'Protocolos: onde o básico vira exfiltração elegante',p:`<p class="ch-p">DNS, DHCP, NTP, SMTP, SNMP e Syslog parecem serviços de infraestrutura, mas são também a avenida por onde muito incidente desfila usando roupa social. DNS pode virar túnel, SNMP mal configurado entrega inventário, NTP pode amplificar ataque e Syslog mal desenhado vira buraco negro de evidência.</p><p class="ch-p">Nos labs de protocolo, o objetivo não é decorar porta como papagaio corporativo. É entender comportamento esperado. DNS em alto volume para domínios estranhos, DHCP oferecendo gateway indevido, SNMP public exposto e NTP sem controle contam histórias. E geralmente são histórias com final ruim.</p><div class="deep-grid"><div class="deep-card"><strong>DNS</strong><span>Resolve nomes, mas também pode carregar beacon, DGA e exfiltração por subdomínios.</span></div><div class="deep-card"><strong>SNMP/Syslog</strong><span>Visibilidade maravilhosa quando bem configurada; vazamento e ruído quando largada no quintal.</span></div></div><div class="deep-scenario"><span class="warn">cenário:</span> host interno consulta 200 subdomínios aleatórios por minuto.<br><span class="bad">chute ruim:</span> “internet lenta”.<br><span class="ok">análise boa:</span> possível DGA, tunelamento DNS ou beacon de malware.</div>`},
+{t:'Switching e VLANs: a camada 2 também sabe destruir seu dia',p:`<p class="ch-p">Switch não é régua de tomada com autoestima. Ele aprende MAC, encaminha quadros, separa domínios e, quando mal configurado, permite que uma VLAN converse com quem não deveria. Camada 2 costuma ser negligenciada porque “não roteia”. Ótimo. O atacante agradece a ingenuidade.</p><p class="ch-p">Os labs deste capítulo simulam MAC table, trunks, VLANs e STP. A pergunta central é: quem deveria falar com quem? Se uma estação de usuário enxerga rede de gerência, se trunk aceita VLAN demais ou se porta de acesso negocia trunk, você não tem rede: tem um buffet livre.</p><div class="deep-grid"><div class="deep-card"><strong>Defesa</strong><span>Port security, BPDU Guard, DHCP Snooping, Dynamic ARP Inspection e trunks restritos.</span></div><div class="deep-card"><strong>Ataque</strong><span>MAC flooding, ARP spoofing, VLAN hopping e abuso de trunk mal definido.</span></div></div><div class="deep-scenario"><span class="warn">lab:</span> porta de usuário aparece como trunk.<br><span class="bad">impacto:</span> possibilidade de VLAN hopping.<br><span class="ok">correção:</span> access mode explícito, allowed VLAN mínimo e DTP desabilitado quando aplicável.</div>`},
+{t:'Roteamento: o caminho importa tanto quanto o destino',p:`<p class="ch-p">Roteamento responde uma pergunta simples: para onde mando esse pacote? O problema é que ambiente real responde com tabela mal documentada, rota estática esquecida, métrica esquisita e alguém dizendo “sempre foi assim”. Em segurança, rota define alcance, inspeção, caminho de saída e ponto de coleta de evidência.</p><p class="ch-p">Quando o lab mostra rotas, gateway, OSPF ou BGP conceitual, pense em decisão. O pacote sai pela VPN? passa pelo firewall? contorna inspeção? cai em rota padrão? Uma rota errada pode ser só indisponibilidade. Ou pode ser bypass lindo para quem não deveria sair.</p><div class="deep-grid"><div class="deep-card"><strong>Erro comum</strong><span>Olhar ACL antes de verificar se o tráfego passa mesmo por aquele equipamento.</span></div><div class="deep-card"><strong>Boa prática</strong><span>Validar tabela, métrica, next-hop, assimetria e retorno antes de culpar aplicação.</span></div></div><div class="deep-scenario"><span class="warn">cenário:</span> ida passa pelo firewall, volta por outro caminho.<br><span class="bad">sintoma:</span> sessão quebra, log fica incompleto.<br><span class="ok">análise:</span> roteamento assimétrico impactando inspeção stateful.</div>`},
+{t:'Cabeamento: a parte física também humilha especialista',p:`<p class="ch-p">Nada devolve a humildade como perder duas horas em política de firewall e descobrir que era cabo ruim. Camada física parece básica até virar intermitência, perda, negociação errada, PoE insuficiente ou fibra invertida. E claro: sempre acontece quando alguém importante está olhando.</p><p class="ch-p">Os labs de cabeamento treinam escolha de mídia, conector, distância, velocidade e energia. Segurança também passa por físico: porta exposta, rack sem controle, tap indevido e switch debaixo da mesa são incidentes esperando crachá.</p><div class="deep-grid"><div class="deep-card"><strong>Cobre</strong><span>Cat6/Cat6A, distância, interferência, negociação e PoE precisam casar com o uso.</span></div><div class="deep-card"><strong>Fibra</strong><span>Ótima para backbone, distância e imunidade EMI; péssima para quem acha que conector é detalhe.</span></div></div><div class="deep-scenario"><span class="warn">cenário:</span> link 1Gbps negocia 100Mbps.<br><span class="bad">chute ruim:</span> “switch velho”.<br><span class="ok">análise boa:</span> cabo, par rompido, auto-negociação, interface ou patch panel.</div>`},
+{t:'Wireless: a rede que atravessa parede e governança',p:`<p class="ch-p">Wi‑Fi é maravilhoso porque conecta todo mundo. Também é horrível pelo mesmo motivo. Diferente do cabo, o meio físico está no ar, educadamente disponível para vizinho, visitante, atacante no estacionamento e aquele IoT que ninguém sabe quem comprou.</p><p class="ch-p">Nos labs de WLAN, preste atenção em canal, banda, segurança, roaming e autenticação. WPA3 ajuda, mas não salva arquitetura ruim. Rede guest misturada com produção continua sendo tragédia com SSID bonitinho.</p><div class="deep-grid"><div class="deep-card"><strong>Projeto</strong><span>2.4 GHz alcança mais e sofre mais; 5/6 GHz entregam desempenho melhor com planejamento.</span></div><div class="deep-card"><strong>Segurança</strong><span>802.1X, segmentação, isolamento de cliente e captive portal não são enfeite.</span></div></div><div class="deep-scenario"><span class="warn">cenário:</span> SSID guest acessa impressora interna.<br><span class="bad">impacto:</span> segmentação decorativa.<br><span class="ok">correção:</span> VLAN guest isolada, ACL restritiva e saída controlada.</div>`},
+{t:'WAN e VPN: confiança remota não é passe livre',p:`<p class="ch-p">VPN não é portal mágico de segurança. Ela cria conectividade. Segurança depende de autenticação, criptografia, postura do endpoint, segmentação e política. Se a VPN entrega acesso amplo à rede interna, você não criou acesso remoto: criou um cabo muito comprido até o problema.</p><p class="ch-p">Os labs de WAN e VPN exploram túneis, rotas, split tunneling, IPSec, WireGuard e SD-WAN. A pergunta boa não é “conectou?”. A pergunta boa é “conectou onde, com qual identidade, por qual rota, com qual privilégio e deixando qual log?”.</p><div class="deep-grid"><div class="deep-card"><strong>Split tunnel</strong><span>Melhora performance, mas exige política; sem controle vira saída invisível.</span></div><div class="deep-card"><strong>Full tunnel</strong><span>Centraliza inspeção, mas cobra capacidade e desenho decente.</span></div></div><div class="deep-scenario"><span class="warn">cenário:</span> usuário VPN acessa subnet de servidores inteira.<br><span class="bad">risco:</span> credencial comprometida vira movimento lateral premium.<br><span class="ok">correção:</span> acesso por grupo, MFA, postura, ZTNA/ACL e logs úteis.</div>`},
+{t:'Operações: documentação é controle de segurança, não castigo',p:`<p class="ch-p">Rede sem documentação é arqueologia. Você escava IP, encontra VLAN, descobre switch, acha rota, consulta planilha de 2021 e reza. Operação madura depende de inventário, IPAM, diagrama, baseline, monitoramento e processo de mudança. Chato? Sim. Necessário? Mais ainda.</p><p class="ch-p">Nos labs de operação, o foco é transformar ruído em visibilidade. SNMP, Syslog, NetFlow, NTP e naming convention reduzem tempo de investigação. Sem isso, o incidente vira reunião com vinte pessoas e nenhuma evidência.</p><div class="deep-grid"><div class="deep-card"><strong>IPAM</strong><span>Evita conflito, acelera investigação e impede que “IP livre” vire lenda urbana.</span></div><div class="deep-card"><strong>Logs</strong><span>Sem horário sincronizado, correlação vira fanfic cronológica.</span></div></div><div class="deep-scenario"><span class="warn">cenário:</span> firewall, switch e servidor com horários diferentes.<br><span class="bad">impacto:</span> timeline quebrada.<br><span class="ok">correção:</span> NTP confiável e padronização de logs.</div>`},
+{t:'Segurança em camadas: uma barreira só é só decoração cara',p:`<p class="ch-p">Firewall é importante. Mas se ele é sua única estratégia, você está basicamente colocando uma porta blindada numa casa sem parede. Segurança em rede combina segmentação, controle de acesso, inspeção, detecção, identidade, logs e resposta.</p><p class="ch-p">Os labs deste capítulo conectam DMZ, IDS/IPS, firewall, ACL e Zero Trust. A pergunta é sempre: o que deve comunicar, por quê, com qual identidade, em qual direção e sob qual visibilidade? “Liberar any any só para testar” é como abrir a jaula para ver se o leão está bravo.</p><div class="deep-grid"><div class="deep-card"><strong>DMZ</strong><span>Publica serviços sem entregar o coração da rede interna numa bandeja.</span></div><div class="deep-card"><strong>Zero Trust</strong><span>Não é produto mágico; é princípio de verificação contínua e menor privilégio.</span></div></div><div class="deep-scenario"><span class="warn">cenário:</span> servidor web na DMZ acessa banco interno sem restrição fina.<br><span class="bad">impacto:</span> web compromise vira caminho para dados.<br><span class="ok">correção:</span> ACL específica, porta mínima, identidade, logs e monitoramento.</div>`},
+{t:'Ataques de rede: o básico ofensivo que defesa precisa reconhecer',p:`<p class="ch-p">Você não precisa ensinar caos ao atacante; ele já vem treinado. Mas precisa reconhecer padrões: spoofing, MITM, scan, DoS, ARP poisoning, DNS abuse, brute force e exploração de serviços. Cada técnica deixa sinais diferentes. O trabalho é enxergar antes de virar manchete interna.</p><p class="ch-p">Nos labs de ataque, não procure “botão de hacker”. Procure indicadores: volume, sequência, destino, porta, repetição, estado TCP, comportamento fora de baseline e relação com topologia. A rede fala. O problema é que muita gente escuta em mudo.</p><div class="deep-grid"><div class="deep-card"><strong>Scan</strong><span>Distribuído, lento ou com RST pode parecer tráfego normal se você só olha volume bruto.</span></div><div class="deep-card"><strong>MITM</strong><span>ARP anômalo, gateway duplicado e certificados estranhos são pistas, não decoração.</span></div></div><div class="deep-scenario"><span class="warn">cenário:</span> muitos SYN para portas variadas, poucos handshakes completos.<br><span class="bad">chute ruim:</span> “usuário curioso”.<br><span class="ok">análise:</span> varredura TCP ou reconhecimento pré-ataque.</div>`},
+{t:'Análise de tráfego: evidência antes de opinião',p:`<p class="ch-p">Analisar tráfego não é abrir ferramenta bonita e esperar que ela confesse o incidente. É formular hipótese, filtrar, validar fluxo, comparar baseline e explicar o que aconteceu. Pacote sem contexto é só fofoca binária.</p><p class="ch-p">Embora exista curso específico de Wireshark, aqui o foco é rede: NetFlow, metadados, Zeek, DNS, conexões, volume e comportamento. Você deve sair sabendo diferenciar lentidão, falha de resolução, bloqueio, scan e comunicação suspeita.</p><div class="deep-grid"><div class="deep-card"><strong>Pacote</strong><span>Mostra detalhe profundo, ótimo para prova pontual.</span></div><div class="deep-card"><strong>Fluxo</strong><span>Mostra padrão e escala, ótimo para caça e operação.</span></div></div><div class="deep-scenario"><span class="warn">cenário:</span> host faz conexões curtas periódicas para IP raro.<br><span class="bad">chute ruim:</span> “telemetria qualquer”.<br><span class="ok">análise:</span> possível beacon; validar domínio, ASN, metadados, processo e recorrência.</div>`},
+{t:'Troubleshooting: método para não virar refém do palpite',p:`<p class="ch-p">Troubleshooting bom é método. Troubleshooting ruim é grupo de WhatsApp com gente culpando DNS, firewall e “a nuvem”. O processo existe para evitar salto lógico: identificar problema, estabelecer teoria, testar, plano de ação, implementar, verificar e documentar.</p><p class="ch-p">O lab final exige que você conecte tudo: camada, IP, rota, porta, DNS, política, evidência e correção. O objetivo não é acertar por instinto. É construir diagnóstico defensável. Em produção, “acho que” não deveria abrir change.</p><div class="deep-grid"><div class="deep-card"><strong>Primeiro passo</strong><span>Defina sintoma, escopo e impacto. Sem isso, você investiga o universo.</span></div><div class="deep-card"><strong>Último passo</strong><span>Documente causa e correção. Memória humana em TI tem TTL curto e alta perda de pacote.</span></div></div><div class="deep-scenario"><span class="warn">cenário:</span> app não acessa banco após mudança de rede.<br><span class="bad">chute ruim:</span> “banco caiu”.<br><span class="ok">método:</span> validar DNS, rota, porta, firewall, retorno, log e change recente.</div>`}
+];
+const LABALIGN=[
+  {
+    "t": "Lab orientado — camadas, handshake e evidência mínima",
+    "p": "<p class=\"ch-p\">Antes do quiz, execute mentalmente o fluxo abaixo. A pergunta não é “qual camada eu decorei?”, é “onde a evidência mora?”. Rede não é horóscopo: cada sintoma deixa rastro em camada, protocolo, porta ou estado.</p><div class=\"deep-scenario\"><span class=\"warn\">tarefa 1:</span> Rode <strong>netstat</strong> e identifique serviços em LISTENING. Porta aberta sem contexto é só fofoca de terminal.<br><span class=\"warn\">tarefa 2:</span> Rode <strong>handshake</strong> e compare SYN, SYN-ACK e ACK. Se só aparece SYN, pense em scan, filtro ou SYN flood.<br><span class=\"warn\">tarefa 3:</span> Rode <strong>encap</strong> e localize MAC, IP, porta e payload. O quiz cobra exatamente essa separação.</div><div class=\"deep-grid\"><div class=\"deep-card\"><strong>O quiz cobra</strong><span>MAC na camada 2, IP spoofing na camada 3, TCP/ACK na camada 4 e modelo TCP/IP como visão prática.</span></div><div class=\"deep-card\"><strong>Erro que reprova</strong><span>Responder por associação vaga: “IP é internet”, “TCP é porta” e outras tragédias de call técnica.</span></div></div>"
+  },
+  {
+    "t": "Lab orientado — subnetting, NAT/PAT e IPv6 sem choro",
+    "p": "<p class=\"ch-p\">Use a calculadora do capítulo como se estivesse desenhando uma rede real. Subnetting não é penitência matemática; é contenção de dano. Uma rede plana demais é o equivalente técnico de deixar todas as portas do prédio abertas “porque facilita”.</p><div class=\"deep-scenario\"><span class=\"warn\">tarefa 1:</span> Calcule <strong>192.168.10.0/26</strong> e anote rede, broadcast e hosts úteis.<br><span class=\"warn\">tarefa 2:</span> Compare <strong>/24</strong>, <strong>/26</strong> e <strong>/30</strong>. Cada prefixo resolve um problema diferente; usar /24 para tudo é preguiça com máscara bonita.<br><span class=\"warn\">tarefa 3:</span> Explique por que PAT usa portas, por que 169.254.x.x denuncia falha de DHCP e por que fe80::/10 não sai roteando feliz pela internet.</div><div class=\"deep-grid\"><div class=\"deep-card\"><strong>O quiz cobra</strong><span>/26, broadcast de /8, PAT, APIPA e IPv6 link-local.</span></div><div class=\"deep-card\"><strong>Erro que reprova</strong><span>Contar host sem remover rede e broadcast. É clássico, triste e muito evitável.</span></div></div>"
+  },
+  {
+    "t": "Lab orientado — protocolos que fingem ser inocentes",
+    "p": "<p class=\"ch-p\">DNS, DHCP, SNMP, NTP e Telnet parecem “básico de infraestrutura”. O problema é que incidente adora básico negligenciado. Protocolo velho, comunidade SNMP pública e DNS barulhento são o trio sertanejo do desastre silencioso.</p><div class=\"deep-scenario\"><span class=\"warn\">tarefa 1:</span> No lab, rode os comandos de diagnóstico e identifique o fluxo DORA: Discover, Offer, Request, Ack.<br><span class=\"warn\">tarefa 2:</span> Compare Telnet e SSH. Se a senha passa em claro, não é legado: é pedido formal de incidente.<br><span class=\"warn\">tarefa 3:</span> Procure sinais de DNS tunneling: consultas longas, subdomínios aleatórios e volume fora do padrão.</div><div class=\"deep-grid\"><div class=\"deep-card\"><strong>O quiz cobra</strong><span>DORA, Telnet inseguro, SNMPv3, DNS tunneling e DHCP Snooping.</span></div><div class=\"deep-card\"><strong>Erro que reprova</strong><span>Achar que porta conhecida significa tráfego legítimo. Malware também sabe usar protocolo bonitinho.</span></div></div>"
+  },
+  {
+    "t": "Lab orientado — switching, VLAN e a camada 2 sem glamour",
+    "p": "<p class=\"ch-p\">Switching é onde muita rede corporativa finge segmentação. VLAN mal definida, trunk permissivo e STP negligenciado criam um parque de diversões para lateral movement. A camada 2 não aparece em dashboard bonito, mas aparece no incidente.</p><div class=\"deep-scenario\"><span class=\"warn\">tarefa 1:</span> Analise a tabela MAC: se muitos MACs aparecem em uma porta, pense em MAC flooding ou loop.<br><span class=\"warn\">tarefa 2:</span> Revise access port versus trunk port. Porta de usuário negociando trunk é quase poesia, só que escrita por um atacante.<br><span class=\"warn\">tarefa 3:</span> Verifique native VLAN e STP. VLAN 1 e STP lento são “sempre foi assim” com consequências.</div><div class=\"deep-grid\"><div class=\"deep-card\"><strong>O quiz cobra</strong><span>CAM table, trunk, native VLAN, STP e LACP.</span></div><div class=\"deep-card\"><strong>Erro que reprova</strong><span>Achar que VLAN é firewall. VLAN separa domínio; quem controla tráfego é política.</span></div></div>"
+  },
+  {
+    "t": "Lab orientado — roteamento, caminho e mentira operacional",
+    "p": "<p class=\"ch-p\">Quando o tráfego não chega, a aplicação vira ré, o firewall vira vilão e o roteamento fica fingindo inocência. O lab deste capítulo força a pergunta certa: qual rota foi escolhida, por qual métrica e com qual retorno?</p><div class=\"deep-scenario\"><span class=\"warn\">tarefa 1:</span> Leia a tabela de rotas e identifique a rota mais específica. Longest Prefix Match ganha de palpite.<br><span class=\"warn\">tarefa 2:</span> Compare rota estática, OSPF e rota padrão. O pacote não segue o caminho mais bonito, segue a tabela.<br><span class=\"warn\">tarefa 3:</span> Simule assimetria: ida por um firewall, volta por outro. Stateful inspection ama sofrer nesse cenário.</div><div class=\"deep-grid\"><div class=\"deep-card\"><strong>O quiz cobra</strong><span>Administrative Distance, Longest Prefix Match, Area 0, rota padrão e BGP hijacking.</span></div><div class=\"deep-card\"><strong>Erro que reprova</strong><span>Olhar só o destino e esquecer o caminho de volta. TCP exige conversa, não monólogo.</span></div></div>"
+  },
+  {
+    "t": "Lab orientado — cabeamento, fibra, PoE e humildade física",
+    "p": "<p class=\"ch-p\">A camada física é aquela que humilha especialista com doutorado em firewall. Link intermitente, CRC error, PoE insuficiente e transceiver errado parecem “coisa simples” até derrubarem produção no horário mais caro.</p><div class=\"deep-scenario\"><span class=\"warn\">tarefa 1:</span> Compare Cat5e, Cat6, Cat6A e fibra para distância e velocidade.<br><span class=\"warn\">tarefa 2:</span> Diante de CRC errors, investigue cabo, conector, interferência, duplex e porta. Não invoque entidade mística antes do patch cord.<br><span class=\"warn\">tarefa 3:</span> Relacione PoE/PoE+ com APs e câmeras. Energia insuficiente gera sintoma “aleatório”, o nome corporativo da falta de método.</div><div class=\"deep-grid\"><div class=\"deep-card\"><strong>O quiz cobra</strong><span>Cat6A, SMF/MMF, PoE+, CRC errors e SFP/SFP+.</span></div><div class=\"deep-card\"><strong>Erro que reprova</strong><span>Escolher cabo por “parece bom”. Rede não deveria ser administrada por estética de conector.</span></div></div>"
+  },
+  {
+    "t": "Lab orientado — Wi‑Fi, canal, autenticação e caos invisível",
+    "p": "<p class=\"ch-p\">Wireless é rede com parede, vizinho, micro-ondas, estacionamento e IoT suspeito no mesmo pacote emocional. O lab exige pensar em espectro, autenticação e isolamento, porque SSID bonito não segura incidente.</p><div class=\"deep-scenario\"><span class=\"warn\">tarefa 1:</span> Compare canais 2.4 GHz não sobrepostos e entenda por que “deixa automático” nem sempre é plano de engenharia.<br><span class=\"warn\">tarefa 2:</span> Compare WPA2-PSK, WPA3-SAE e 802.1X. Senha compartilhada em empresa é confiança coletiva na sorte.<br><span class=\"warn\">tarefa 3:</span> Analise Evil Twin: SSID parecido, sinal forte e usuário distraído. O pacote perfeito do desastre.</div><div class=\"deep-grid\"><div class=\"deep-card\"><strong>O quiz cobra</strong><span>Canais 1/6/11, WPA3, 802.11ax, Evil Twin e WPA2-Enterprise.</span></div><div class=\"deep-card\"><strong>Erro que reprova</strong><span>Confundir criptografia forte com arquitetura segura. Guest na rede interna continua sendo guest com crachá falso.</span></div></div>"
+  },
+  {
+    "t": "Lab orientado — WAN, VPN, SD-WAN e confiança remota",
+    "p": "<p class=\"ch-p\">VPN conecta. Ela não absolve pecado arquitetural. Se o usuário remoto entra na rede inteira, você não fez acesso seguro; fez um cabo comprido atravessando a internet com crachá de “confia”.</p><div class=\"deep-scenario\"><span class=\"warn\">tarefa 1:</span> Compare MPLS, VPN e SD-WAN: transporte, criptografia, política e roteamento por aplicação.<br><span class=\"warn\">tarefa 2:</span> Analise split tunneling: melhora tráfego, mas pode escapar de inspeção se a política for teatro.<br><span class=\"warn\">tarefa 3:</span> Compare VPN tradicional e ZTNA. A pergunta madura não é “conectou?”, é “a quê, por quê, com qual postura e qual log?”.</div><div class=\"deep-grid\"><div class=\"deep-card\"><strong>O quiz cobra</strong><span>MPLS sem criptografia nativa, SD-WAN application-aware, PPTP inseguro, ZTNA e split tunneling.</span></div><div class=\"deep-card\"><strong>Erro que reprova</strong><span>Achar que túnel é sinônimo de segurança. Túnel também transporta problema muito bem.</span></div></div>"
+  },
+  {
+    "t": "Lab orientado — operação, IPAM, baseline e ferramentas",
+    "p": "<p class=\"ch-p\">Operação de rede sem documentação é arqueologia com SLA. O lab deste capítulo treina ferramentas e evidências: IPAM, baseline, traceroute, iperf e change log. Sem isso, cada incidente vira sessão espírita com roteador.</p><div class=\"deep-scenario\"><span class=\"warn\">tarefa 1:</span> Rode comandos de diagnóstico e separe conectividade, resolução de nome, caminho e performance.<br><span class=\"warn\">tarefa 2:</span> Defina baseline: tráfego normal, latência esperada, rotas usuais e volumetria. Sem normal, não existe anormal; existe susto.<br><span class=\"warn\">tarefa 3:</span> Monte um change log mínimo: quem, quando, o que mudou, motivo, rollback e evidência.</div><div class=\"deep-grid\"><div class=\"deep-card\"><strong>O quiz cobra</strong><span>IPAM, baseline, traceroute, iperf3 e change log.</span></div><div class=\"deep-card\"><strong>Erro que reprova</strong><span>“Foi só uma alteração pequena”. Frase famosa antes de um incidente grande.</span></div></div>"
+  },
+  {
+    "t": "Lab orientado — firewall, IDS/IPS, DMZ e Zero Trust",
+    "p": "<p class=\"ch-p\">Segurança em camadas não é empilhar appliance até a sala do rack virar vitrine. É criar controle coerente: segmentação, inspeção, registro, hardening e validação contínua. O lab pede raciocínio de arquitetura, não fé no vendor.</p><div class=\"deep-scenario\"><span class=\"warn\">tarefa 1:</span> Compare IDS e IPS: detectar versus bloquear. Um grita, o outro mete a mão. Ambos precisam contexto.<br><span class=\"warn\">tarefa 2:</span> Desenhe DMZ: serviço exposto não deve abraçar banco interno sem política.<br><span class=\"warn\">tarefa 3:</span> Aplique Zero Trust: identidade, dispositivo, contexto, menor privilégio e verificação contínua. “Está na rede interna” não é argumento, é trauma legado.</div><div class=\"deep-grid\"><div class=\"deep-card\"><strong>O quiz cobra</strong><span>IDS/IPS, NGFW, DMZ, Zero Trust e hardening.</span></div><div class=\"deep-card\"><strong>Erro que reprova</strong><span>Achar que firewall default deny resolve arquitetura ruim. Ele ajuda; não faz milagre com planilha bagunçada.</span></div></div>"
+  },
+  {
+    "t": "Lab orientado — ataques de rede com foco defensivo",
+    "p": "<p class=\"ch-p\">Este capítulo não ensina a “fazer bagunça”; ensina a reconhecer o cheiro técnico da bagunça. Ataque de rede deixa padrão: volume, assimetria, spoofing, sessão incompleta, AP falso, ARP suspeito ou consumo lento de recurso.</p><div class=\"deep-scenario\"><span class=\"warn\">tarefa 1:</span> No lab de reconhecimento, compare scan SYN, conexão completa e ruído de porta fechada.<br><span class=\"warn\">tarefa 2:</span> Diferencie DoS volumétrico de ataque low-and-slow como Slowloris. Um derruba na pancada, o outro na paciência irritante.<br><span class=\"warn\">tarefa 3:</span> Relacione ARP Poisoning, Rogue AP e DNS Amplification com mitigação adequada.</div><div class=\"deep-grid\"><div class=\"deep-card\"><strong>O quiz cobra</strong><span>Slowloris, DNS amplification, Rogue AP, ARP Poisoning e SYN scan.</span></div><div class=\"deep-card\"><strong>Erro que reprova</strong><span>Responder “bloqueia no firewall” para tudo. Isso é menos estratégia e mais reflexo nervoso.</span></div></div>"
+  },
+  {
+    "t": "Lab orientado — evidência de rede sem virar curso de ferramenta",
+    "p": "<p class=\"ch-p\">Aqui o foco não é ferramenta específica; é evidência. Pacote, fluxo, beacon, SYN puro, User-Agent estranho e telemetria agregada contam histórias. Ferramenta muda; o raciocínio fica. Pelo menos deveria.</p><div class=\"deep-scenario\"><span class=\"warn\">tarefa 1:</span> Identifique SYN puro: tentativa de conexão sem ACK final pode indicar scan.<br><span class=\"warn\">tarefa 2:</span> Compare PCAP e NetFlow: pacote é microscópio, fluxo é mapa. Usar um no lugar do outro dá aquela falsa sensação de competência.<br><span class=\"warn\">tarefa 3:</span> Analise beaconing: intervalo regular, destino incomum e padrão repetitivo. Malware adora rotina, infelizmente.</div><div class=\"deep-grid\"><div class=\"deep-card\"><strong>O quiz cobra</strong><span>Filtro para SYN puro, beaconing, NetFlow, Zeek e User-Agent anacrônico.</span></div><div class=\"deep-card\"><strong>Erro que reprova</strong><span>Ver User-Agent antigo e chamar de “compatibilidade”. Em 2026, MSIE 6 é mais evidência do que nostalgia.</span></div></div>"
+  },
+  {
+    "t": "Lab orientado — troubleshooting com método, não com vela",
+    "p": "<p class=\"ch-p\">Troubleshooting bom começa com escopo. Troubleshooting ruim começa reiniciando coisa aleatória e esperando a rede se sentir culpada. O lab final amarra tudo: sintoma, hipótese, teste, correção, validação e documentação.</p><div class=\"deep-scenario\"><span class=\"warn\">tarefa 1:</span> Defina o problema: quem é afetado, desde quando, em qual rede, em qual serviço e após qual mudança.<br><span class=\"warn\">tarefa 2:</span> Teste em ordem: IP, gateway, rota, DNS, porta, firewall, aplicação e retorno.<br><span class=\"warn\">tarefa 3:</span> Quando uma teoria falhar, crie nova hipótese. Não case com hipótese ruim; ela não vai mudar por amor.</div><div class=\"deep-grid\"><div class=\"deep-card\"><strong>O quiz cobra</strong><span>Primeiro passo, APIPA, falha de DNS, teoria refutada e CRC errors.</span></div><div class=\"deep-card\"><strong>Erro que reprova</strong><span>Pular documentação final. Incidente sem registro volta disfarçado e ainda te chama pelo nome.</span></div></div>"
+  }
+];
+function addDeepDivePages(cv,idx){
+  const d=DEEP[idx];
+  const l=LABALIGN[idx];
+  const pages=[...cv.querySelectorAll('.pdf-page')];
+  const quizPage=pages.find(p=>p.textContent.includes('Quiz'));
+  if(d){
+    const page=mkPage(`Cap.${idx+1} · Didática aplicada`,'+',`<h2 class="ch-h2">${d.t}</h2>${d.p}<div class="deep-note"><b>Ligação com o quiz:</b> as questões deste capítulo usam o conteúdo e o lab como base. Não responda como quem decorou flashcard; responda como quem precisa explicar o incidente sem passar vergonha na call.</div>`);
+    if(quizPage) cv.insertBefore(page,quizPage); else cv.appendChild(page);
+  }
+  if(l){
+    const page2=mkPage(`Cap.${idx+1} · Lab guiado`,'LAB',`<h2 class="ch-h2">${l.t}</h2>${l.p}<div class="deep-note"><b>Checklist antes do quiz:</b> responda só depois de conseguir explicar o cenário do lab em voz alta. Se a explicação sair como “porque sim”, ainda não é análise; é superstição com teclado.</div>`);
+    const pages2=[...cv.querySelectorAll('.pdf-page')];
+    const quizPage2=pages2.find(p=>p.textContent.includes('Quiz'));
+    if(quizPage2) cv.insertBefore(page2,quizPage2); else cv.appendChild(page2);
+  }
+}
+
+
+/* ══ NAVIGATION ══ */
+function renderNav(){
+  const nav=document.getElementById('sb-nav');if(!nav)return;
+  const tot=CHS.length,pct=Math.round(ST.done.length/tot*100);
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-pct').textContent=pct+'%';
+  let html='',lastDom=0;
+  CHS.forEach(ch=>{
+    if(ch.dom!==lastDom){html+=`<div class="sb-sec">${DN[ch.dom]} · ${DW[ch.dom]}</div>`;lastDom=ch.dom;}
+    const done=ST.done.includes(ch.id),act=ST.cur===ch.id;
+    const lock=ch.id>0&&!ST.done.includes(ch.id-1)&&!done&&!act;
+    html+=`<div class="nav-item ${done?'done':''} ${act?'active':''} ${lock?'locked':''}" onclick="${lock?'':'`goTo('+ch.id+')`'}">
+      <div class="n-num">${done?'✓':ch.id+1}</div>
+      <div class="n-title">${ch.title}</div>
+      ${lock?'<span class="n-lock">🔒</span>':done?'<span class="n-chk">★</span>':''}
+    </div>`;
+  });
+  if(ST.done.length===tot){html+=`<div class="sb-sec">Conclusão</div><div class="nav-item ${ST.cur===99?'active':''} done" onclick="showCert()"><div class="n-num">🏆</div><div class="n-title">Certificado</div><span class="n-chk">★</span></div>`;}
+  nav.innerHTML=html;
+}
+function goTo(idx){
+  if(idx>0 && !ST.done.includes(idx-1)){alert('Capítulo bloqueado. Conclua o capítulo anterior primeiro. Rede sem ordem vira broadcast de desespero.');return;}
+  ST.cur=idx;
+  document.getElementById('welcome-view').style.display='none';
+  document.getElementById('cert-view').style.display='none';
+  const cv=document.getElementById('ch-view');cv.style.display='flex';cv.innerHTML='';
+  const nb=document.createElement('div');nb.className='ch-nav';
+  const pL=idx>0?CHS[idx-1].title.substring(0,20)+'…':'Início';
+  const nL=idx<CHS.length-1?CHS[idx+1].title.substring(0,20)+'…':'Certificado';
+  const canNext=idx<CHS.length-1?ST.done.includes(idx):ST.done.length===CHS.length;
+  nb.innerHTML=`<button class="nav-btn sec" onclick="${idx>0?`goTo(${idx-1})`:'showWelcome()'}">← ${pL}</button>
+  <span style="font-size:11px;color:#7a3050">${idx+1}/${CHS.length}</span>
+  <button class="nav-btn pri ${canNext?'':'locked-next'}" onclick="${canNext?(idx<CHS.length-1?`goTo(${idx+1})`:'showCert()'):`alert('Finalize o quiz deste capítulo para desbloquear o próximo. Sim, é proposital.')`}"> ${nL} →</button>`;
+  cv.appendChild(nb);
+  CHS[idx].fn(cv);
+  addDeepDivePages(cv,idx);
+  renderNav();cv.parentElement.scrollTo(0,0);
+}
+function showWelcome(){ST.cur=-1;document.getElementById('welcome-view').style.display='flex';document.getElementById('ch-view').style.display='none';document.getElementById('cert-view').style.display='none';renderNav();document.getElementById('main').scrollTo(0,0);}
+function showCert(){
+  if(ST.done.length<CHS.length){alert('Complete todos os capítulos primeiro!');return;}
+  ST.cur=99;
+  document.getElementById('welcome-view').style.display='none';document.getElementById('ch-view').style.display='none';
+  const cv=document.getElementById('cert-view');cv.style.display='flex';buildCert(cv);renderNav();cv.parentElement.scrollTo(0,0);
+}
+function buildCert(con){
+  con.innerHTML='';
+  const d=new Date(),ds=d.toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+  const cid='MBS-'+Math.random().toString(36).substring(2,7).toUpperCase()+'-NET-2026';
+  const w=document.createElement('div');w.className='cert-wrap';
+  w.dataset.cid=cid;w.dataset.date=ds;
+  w.innerHTML=`<div class="cert-corner tl"></div><div class="cert-corner tr"></div><div class="cert-corner bl"></div><div class="cert-corner br"></div>
+<div class="cert-top"><div class="cert-issuer">Mariana BS - 2026</div><div class="cert-course">Fundamentos de Redes para Cibersegurança</div></div>
+<div class="cert-body">
+  <div class="cert-pres">Certificado concedido a</div>
+  <input class="cert-inp" id="cert-name" placeholder="Seu nome completo" onclick="this.select()">
+  <div class="cert-desc">por concluir com êxito o curso <strong>Fundamentos de Redes para Cibersegurança</strong>, com carga horária de <strong>12 horas</strong>, incluindo conteúdo técnico, labs práticos interativos e avaliações aprovadas.</div>
+  <div class="cert-sigs">
+    <div class="cert-sig"><div class="cert-sig-line">Mariana BS</div><div class="cert-sig-lbl">Instrutora</div></div>
+    <div style="text-align:center"><div style="font-size:32px">🛡</div><div style="font-size:9px;color:var(--gold);letter-spacing:.06em">REDES 2026</div></div>
+    <div class="cert-sig"><div class="cert-sig-line">12 horas</div><div class="cert-sig-lbl">Carga horária</div></div>
+  </div>
+</div>
+<div class="cert-bot"><span class="cert-id">ID: ${cid}</span><span class="cert-date">${ds}</span></div>`;
+  con.appendChild(w);
+  const btn=document.createElement('button');btn.className='print-btn';btn.innerHTML='⬇ Baixar certificado em PNG';btn.onclick=()=>downloadCertPNG(cid,ds);con.appendChild(btn);
+}
+function drawCenteredText(ctx,text,x,y,maxWidth,lineHeight){
+  const words=String(text).split(' ');let line='',lines=[];
+  for(const word of words){const test=line?line+' '+word:word;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word;}else{line=test;}}
+  if(line)lines.push(line);
+  lines.forEach((ln,i)=>ctx.fillText(ln,x,y+i*lineHeight));
+  return y+lines.length*lineHeight;
+}
+function downloadCertPNG(cid,ds){
+  const nameEl=document.getElementById('cert-name');
+  const person=(nameEl?.value||'Seu nome completo').trim();
+  const W=1600,H=1100;
+  const c=document.createElement('canvas');c.width=W;c.height=H;
+  const ctx=c.getContext('2d');
+  ctx.fillStyle='#fefaf6';ctx.fillRect(0,0,W,H);
+  const grad=ctx.createLinearGradient(0,0,W,0);grad.addColorStop(0,'#2a0e1c');grad.addColorStop(1,'#180810');
+  ctx.fillStyle=grad;ctx.fillRect(0,0,W,190);ctx.fillRect(0,H-120,W,120);
+  ctx.strokeStyle='#c9913d';ctx.lineWidth=8;ctx.strokeRect(42,42,W-84,H-84);
+  ctx.lineWidth=2;ctx.strokeRect(72,72,W-144,H-144);
+  ctx.fillStyle='#e8b86d';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.font='700 34px Georgia, serif';ctx.fillText('Mariana BS - 2026',W/2,70);
+  ctx.font='italic 48px Georgia, serif';ctx.fillText('Fundamentos de Redes para Cibersegurança',W/2,135);
+  ctx.fillStyle='#3d1e10';ctx.font='700 26px Arial, sans-serif';ctx.fillText('Certificado concedido a',W/2,285);
+  ctx.fillStyle='#1a0a06';ctx.font='700 62px Georgia, serif';ctx.fillText(person,W/2,375);
+  ctx.strokeStyle='#c9913d';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(390,425);ctx.lineTo(W-390,425);ctx.stroke();
+  ctx.fillStyle='#3d1e10';ctx.font='30px Arial, sans-serif';
+  let y=505;
+  y=drawCenteredText(ctx,'por concluir com êxito o curso Fundamentos de Redes para Cibersegurança, com carga horária de 12 horas, incluindo conteúdo técnico, labs práticos interativos e avaliações aprovadas.',W/2,y,1080,42)+18;
+  ctx.fillStyle='#9e3352';ctx.font='700 28px Arial, sans-serif';ctx.fillText('Carga horária: 12 horas',W/2,y+18);
+  ctx.fillStyle='#1a0a06';ctx.font='italic 42px Georgia, serif';ctx.fillText('Mariana BS',430,835);
+  ctx.strokeStyle='#d4b896';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(260,875);ctx.lineTo(600,875);ctx.stroke();
+  ctx.fillStyle='#6b3a20';ctx.font='700 20px Arial, sans-serif';ctx.fillText('Instrutora',430,910);
+  ctx.fillStyle='#1a0a06';ctx.font='700 36px Georgia, serif';ctx.fillText('12 horas',W-430,835);
+  ctx.strokeStyle='#d4b896';ctx.beginPath();ctx.moveTo(W-600,875);ctx.lineTo(W-260,875);ctx.stroke();
+  ctx.fillStyle='#6b3a20';ctx.font='700 20px Arial, sans-serif';ctx.fillText('Carga horária',W-430,910);
+  ctx.fillStyle='#f0c8d2';ctx.font='700 22px monospace';ctx.textAlign='left';ctx.fillText('ID: '+cid,90,H-60);
+  ctx.textAlign='right';ctx.fillStyle='#e8b86d';ctx.font='700 22px Arial, sans-serif';ctx.fillText(ds,W-90,H-60);
+  const a=document.createElement('a');
+  a.download='certificado-redes-ciberseguranca.png';
+  a.href=c.toDataURL('image/png');
+  a.click();
+}
+
+
+/* ══ WELCOME ══ */
+function buildWelcome(){
+  const wv=document.getElementById('welcome-view');
+  wv.innerHTML='';
+  const p=document.createElement('div');p.className='wlc-page';
+  p.innerHTML=`<div class="wlc-hero">
+    <div class="wlc-tag">Treinamento técnico real · redes para cibersegurança · 2026</div>
+    <h1 class="wlc-h1">Fundamentos de Redes<br>para <em>Cibersegurança</em></h1>
+    <div class="wlc-sub">Se você acha que rede é só “pingou, tá vivo”, este curso vai corrigir esse otimismo perigoso.</div>
+    <div class="wlc-stats">
+      <div class="wlc-stat"><strong>13</strong><span>capítulos bloqueados</span></div>
+      <div class="wlc-stat"><strong>12h</strong><span>carga horária realista</span></div>
+      <div class="wlc-stat"><strong>65+</strong><span>questões aplicadas</span></div>
+      <div class="wlc-stat"><strong>Labs</strong><span>cenários de rede</span></div>
+    </div>
+  </div>
+  <div class="wlc-body">
+    <p class="wlc-intro"><strong>Bem-vinda ao curso.</strong> A ideia aqui não é transformar você em decoradora oficial de portas TCP, esse cargo já está ocupado por apostilas ruins desde 1998. O objetivo é fazer você raciocinar como alguém que precisa investigar tráfego, segmentar ambiente, entender falha de comunicação, interpretar evidência e não culpar o firewall por tudo antes de olhar rota, DNS, estado TCP, NAT e aquele switch esquecido que ninguém admite que existe.</p>
+
+    <h2 class="ch-h2">O que este curso ensina de verdade</h2>
+    <p class="ch-p">Você vai passar por fundamentos, implementação, operação, segurança e troubleshooting. Cada capítulo conecta conceito técnico com impacto prático: o que quebra, como aparece no ambiente, como investigar e que tipo de incidente nasce dali quando ninguém presta atenção.</p>
+    <div class="deep-grid">
+      <div class="deep-card"><strong>Fundamentos sem anestesia</strong><span>OSI, TCP/IP, IP, sub-redes, protocolos e portas. Sem “decoreba gourmet”.</span></div>
+      <div class="deep-card"><strong>Implementação de rede</strong><span>VLAN, switching, roteamento, wireless, cabeamento, VPN e WAN com foco em projeto e falha real.</span></div>
+      <div class="deep-card"><strong>Operação e visibilidade</strong><span>IPAM, syslog, SNMP, NetFlow, documentação, monitoramento e aquela planilha que ninguém atualiza até dar incidente.</span></div>
+      <div class="deep-card"><strong>Segurança e troubleshooting</strong><span>MITM, spoofing, DoS, segmentação, DMZ, firewall, IDS/IPS e diagnóstico em método, não em superstição.</span></div>
+    </div>
+
+    <h2 class="ch-h2">Como o progresso é salvo</h2>
+    <p class="ch-p">O curso salva seu progresso no próprio navegador usando <strong>localStorage</strong>. O arquivo não envia seu progresso para servidor nenhum: é local, simples e honesto, diferente de muita arquitetura vendida como “cloud native” só porque tem login bonito. Isso significa que você pode fechar e voltar depois, desde que use o mesmo navegador e não limpe os dados locais. Se limpar cache, trocar de máquina ou abrir em outro navegador, o curso não vai adivinhar sua jornada espiritual: começa de novo.</p>
+    <div class="wlc-flow"><div><strong>1. Leia</strong>Conceito com cenário real.</div><div><strong>2. Execute</strong>Lab de rede no HTML.</div><div><strong>3. Responda</strong>Quiz com pegadinha justa.</div><div><strong>4. Desbloqueie</strong>Próximo capítulo só com aprovação.</div></div>
+
+    <div class="deep-note"><b>Regra do jogo:</b> cada capítulo tem conteúdo, lab e quiz. O próximo capítulo só libera quando você atingir o mínimo. Se você tentar avançar sem concluir, o curso bloqueia. É uma representação fiel da vida adulta: nem sempre o botão que você quer clicar está disponível.</div>
+
+    <h2 class="ch-h2">Antes do Modelo OSI: por que redes importam em cibersegurança?</h2>
+    <p class="ch-p">Porque ataque não acontece no PowerPoint. Ele atravessa DNS, TCP, UDP, HTTP, VPN, roteador, switch, ACL, NAT, proxy, endpoint e log. Quando você entende rede, você para de tratar alerta como mensagem mística e começa a enxergar fluxo, origem, destino, camada, porta, sessão e evidência.</p>
+    <p class="ch-p">Um analista que não entende rede olha um log e diz “tem algo estranho”. Um analista que entende rede diz: “esse host interno fez consulta DNS suspeita, abriu sessão TLS para ASN incomum, saiu por NAT compartilhado e não deveria atravessar essa VLAN”. A diferença entre os dois é pequena: um investiga, o outro torce.</p>
+
+    <div class="wlc-req">
+      <div class="wr-ttl">Como usar sem passar vergonha para si mesma</div>
+      <div class="wr-item">Siga os capítulos em ordem. Rede tem dependência; não é série da Netflix para pular episódio.</div>
+      <div class="wr-item">Faça os labs antes do quiz. As questões conversam com os cenários práticos.</div>
+      <div class="wr-item">A aprovação mínima por capítulo é 3/5. Acertar chutando não conta como iluminação técnica.</div>
+      <div class="wr-item">O certificado só aparece depois de concluir tudo. Sim, ele tem dignidade.</div>
+    </div>
+    <button class="start-btn" onclick="goTo(0)">Começar do jeito certo — introdução concluída, agora OSI</button>
+  </div>`;
+  wv.appendChild(p);
+}
+
+buildWelcome();
+renderNav();
+</script>
+</body>
+</html>
