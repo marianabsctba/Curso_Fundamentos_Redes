@@ -1369,7 +1369,7 @@ function buildCert(con){
 <div class="cert-body">
   <div class="cert-pres">Certificado concedido a</div>
   <input class="cert-inp" id="cert-name" placeholder="Seu nome completo" onclick="this.select()">
-  <div class="cert-desc">por concluir com êxito o curso <strong>Fundamentos de Redes para Cibersegurança</strong>, com carga horária de <strong>12 horas</strong>, incluindo conteúdo técnico, labs práticos interativos e avaliações aprovadas.</div>
+  <div class="cert-desc">por concluir com êxito o curso <strong>Fundamentos de Redes para Cibersegurança</strong></strong>, incluindo conteúdo técnico, labs práticos interativos e avaliações aprovadas.</div>
   <div class="cert-sigs">
     <div class="cert-sig"><div class="cert-sig-line">Mariana BS</div><div class="cert-sig-lbl">Instrutora</div></div>
     <div style="text-align:center"><div style="font-size:32px">🛡</div><div style="font-size:9px;color:var(--gold);letter-spacing:.06em">REDES 2026</div></div>
@@ -1406,8 +1406,7 @@ function downloadCertPNG(cid,ds){
   ctx.strokeStyle='#c9913d';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(390,425);ctx.lineTo(W-390,425);ctx.stroke();
   ctx.fillStyle='#3d1e10';ctx.font='30px Arial, sans-serif';
   let y=505;
-  y=drawCenteredText(ctx,'por concluir com êxito o curso Fundamentos de Redes para Cibersegurança, com carga horária de 12 horas, incluindo conteúdo técnico, labs práticos interativos e avaliações aprovadas.',W/2,y,1080,42)+18;
-  ctx.fillStyle='#9e3352';ctx.font='700 28px Arial, sans-serif';ctx.fillText('Carga horária: 12 horas',W/2,y+18);
+  y=drawCenteredText(ctx,'por concluir com êxito o curso Fundamentos de Redes para Cibersegurança, incluindo conteúdo técnico, labs práticos interativos e avaliações aprovadas.',W/2,y,1080,42)+18;
   ctx.fillStyle='#1a0a06';ctx.font='italic 42px Georgia, serif';ctx.fillText('Mariana BS',430,835);
   ctx.strokeStyle='#d4b896';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(260,875);ctx.lineTo(600,875);ctx.stroke();
   ctx.fillStyle='#6b3a20';ctx.font='700 20px Arial, sans-serif';ctx.fillText('Instrutora',430,910);
