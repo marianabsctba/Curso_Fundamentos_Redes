@@ -1358,6 +1358,14 @@ function showCert(){
   document.getElementById('welcome-view').style.display='none';document.getElementById('ch-view').style.display='none';
   const cv=document.getElementById('cert-view');cv.style.display='flex';buildCert(cv);renderNav();cv.parentElement.scrollTo(0,0);
 }
+function makeCertHash(cid,ds){
+  const base=(cid+'|'+ds+'|Fundamentos de Redes para Cibersegurança|Mariana BS').normalize('NFKD');
+  let h1=0x811c9dc5,h2=0x45d9f3b;
+  for(let i=0;i<base.length;i++){const ch=base.charCodeAt(i);h1^=ch;h1=Math.imul(h1,0x01000193);h2=Math.imul(h2^ch,0x27d4eb2d);}
+  const a=(h1>>>0).toString(16).padStart(8,'0').toUpperCase();
+  const b=(h2>>>0).toString(16).padStart(8,'0').toUpperCase();
+  return `SHA-${a}-${b}`;
+}
 function buildCert(con){
   con.innerHTML='';
   const d=new Date(),ds=d.toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
@@ -1369,14 +1377,26 @@ function buildCert(con){
 <div class="cert-body">
   <div class="cert-pres">Certificado concedido a</div>
   <input class="cert-inp" id="cert-name" placeholder="Seu nome completo" onclick="this.select()">
-  <div class="cert-desc">por concluir com êxito o curso <strong>Fundamentos de Redes para Cibersegurança</strong></strong>, incluindo conteúdo técnico, labs práticos interativos e avaliações aprovadas.</div>
+  <div class="cert-desc">por concluir com êxito o curso <strong>Fundamentos de Redes para Cibersegurança</strong>, incluindo conteúdo técnico, labs práticos interativos e avaliações aprovadas.</div>
+  <div class="cert-skills" aria-label="Resumo de competências">
+    <span class="cert-tag">OSI/TCP-IP</span>
+    <span class="cert-tag">Subnetting</span>
+    <span class="cert-tag">Protocolos</span>
+    <span class="cert-tag">VLANs</span>
+    <span class="cert-tag">Roteamento</span>
+    <span class="cert-tag">Wireless</span>
+    <span class="cert-tag">VPN/WAN</span>
+    <span class="cert-tag">Segurança em Camadas</span>
+    <span class="cert-tag">Análise de Tráfego</span>
+    <span class="cert-tag">Troubleshooting</span>
+  </div>
   <div class="cert-sigs">
-    <div class="cert-sig"><div class="cert-sig-line">Mariana BS</div><div class="cert-sig-lbl">Instrutora</div></div>
+    <div class="cert-sig"><div class="cert-sig-line">Mariana BS (Instrutora)</div><div class="cert-sig-lbl">Assinatura</div></div>
     <div style="text-align:center"><div style="font-size:32px">🛡</div><div style="font-size:9px;color:var(--gold);letter-spacing:.06em">REDES 2026</div></div>
-    <div class="cert-sig"><div class="cert-sig-line">12 horas</div><div class="cert-sig-lbl">Carga horária</div></div>
+    <div class="cert-sig"><div class="cert-sig-line">${ds}</div><div class="cert-sig-lbl">Data de emissão</div></div>
   </div>
 </div>
-<div class="cert-bot"><span class="cert-id">ID: ${cid}</span><span class="cert-date">${ds}</span></div>`;
+<div class="cert-bot"><span class="cert-id">ID: ${cid} · Hash: ${makeCertHash(cid,ds)}</span><span class="cert-date">Carga horária: 12 horas</span></div>`;
   con.appendChild(w);
   const btn=document.createElement('button');btn.className='print-btn';btn.innerHTML='⬇ Baixar certificado em PNG';btn.onclick=()=>downloadCertPNG(cid,ds);con.appendChild(btn);
 }
@@ -1389,7 +1409,9 @@ function drawCenteredText(ctx,text,x,y,maxWidth,lineHeight){
 }
 function downloadCertPNG(cid,ds){
   const nameEl=document.getElementById('cert-name');
-  const person=(nameEl?.value||'Seu nome completo').trim();
+  const person=(nameEl?.value||'').trim();
+  if(!person){alert('Digite o nome completo antes de gerar o certificado. Certificado sem nome é igual IP sem gateway: fica perdido.');nameEl?.focus();return;}
+  const hash=makeCertHash(cid,ds);
   const W=1600,H=1100;
   const c=document.createElement('canvas');c.width=W;c.height=H;
   const ctx=c.getContext('2d');
@@ -1406,17 +1428,18 @@ function downloadCertPNG(cid,ds){
   ctx.strokeStyle='#c9913d';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(390,425);ctx.lineTo(W-390,425);ctx.stroke();
   ctx.fillStyle='#3d1e10';ctx.font='30px Arial, sans-serif';
   let y=505;
-  y=drawCenteredText(ctx,'por concluir com êxito o curso Fundamentos de Redes para Cibersegurança, incluindo conteúdo técnico, labs práticos interativos e avaliações aprovadas.',W/2,y,1080,42)+18;
-  ctx.fillStyle='#1a0a06';ctx.font='italic 42px Georgia, serif';ctx.fillText('Mariana BS',430,835);
-  ctx.strokeStyle='#d4b896';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(260,875);ctx.lineTo(600,875);ctx.stroke();
-  ctx.fillStyle='#6b3a20';ctx.font='700 20px Arial, sans-serif';ctx.fillText('Instrutora',430,910);
-  ctx.fillStyle='#1a0a06';ctx.font='700 36px Georgia, serif';ctx.fillText('12 horas',W-430,835);
+  y=drawCenteredText(ctx,'por concluir com êxito o curso Fundamentos de Redes para Cibersegurança, incluindo conteúdo técnico, labs práticos interativos e avaliações aprovadas.',W/2,y,1080,42)+28;
+  ctx.fillStyle='#6b3a20';ctx.font='700 22px Arial, sans-serif';ctx.fillText('Competências: OSI/TCP-IP · Subnetting · Protocolos · VLANs · Roteamento · Wireless · VPN/WAN · Segurança · Análise de Tráfego · Troubleshooting',W/2,y+12);
+  ctx.fillStyle='#1a0a06';ctx.font='italic 42px Georgia, serif';ctx.fillText('Mariana BS (Instrutora)',430,835);
+  ctx.strokeStyle='#d4b896';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(230,875);ctx.lineTo(630,875);ctx.stroke();
+  ctx.fillStyle='#6b3a20';ctx.font='700 20px Arial, sans-serif';ctx.fillText('Assinatura',430,910);
+  ctx.fillStyle='#1a0a06';ctx.font='700 30px Georgia, serif';ctx.fillText(ds,W-430,835);
   ctx.strokeStyle='#d4b896';ctx.beginPath();ctx.moveTo(W-600,875);ctx.lineTo(W-260,875);ctx.stroke();
-  ctx.fillStyle='#6b3a20';ctx.font='700 20px Arial, sans-serif';ctx.fillText('Carga horária',W-430,910);
-  ctx.fillStyle='#f0c8d2';ctx.font='700 22px monospace';ctx.textAlign='left';ctx.fillText('ID: '+cid,90,H-60);
-  ctx.textAlign='right';ctx.fillStyle='#e8b86d';ctx.font='700 22px Arial, sans-serif';ctx.fillText(ds,W-90,H-60);
+  ctx.fillStyle='#6b3a20';ctx.font='700 20px Arial, sans-serif';ctx.fillText('Data de emissão',W-430,910);
+  ctx.fillStyle='#f0c8d2';ctx.font='700 22px monospace';ctx.textAlign='left';ctx.fillText('ID: '+cid+' · Hash: '+hash,90,H-60);
+  ctx.textAlign='right';ctx.fillStyle='#e8b86d';ctx.font='700 22px Arial, sans-serif';ctx.fillText('Carga horária: 12 horas',W-90,H-60);
   const a=document.createElement('a');
-  a.download='certificado-redes-ciberseguranca.png';
+  a.download='certificado-redes-ciberseguranca-mariana-bs.png';
   a.href=c.toDataURL('image/png');
   a.click();
 }
